@@ -1,0 +1,44 @@
+.background-pane {
+    -fx-background-size: cover;
+    -fx-background-image: url("./Images/Artboard 1.png");
+    -fx-alignment: center;
+}
+
+/* Add this CSS code to your stylesheet */
+
+/* Add this CSS code to your stylesheet */
+
+.button {
+    -fx-background-color: #f48c06; /* Background color */
+    -fx-text-fill: white; /* Text color */
+    -fx-font-size: 14px; /* Font size */
+    -fx-background-radius: 10; /* Border radius */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0); /* Drop shadow */
+    -fx-min-width: 100px; /* Minimum width */
+    -fx-min-height: 30px; /* Minimum height */
+    -fx-max-width: 100px; /* Maximum width */
+    -fx-max-height: 30px; /* Maximum height */
+    -fx-alignment: center; /* Text alignment */
+}
+
+.button:hover {
+    -fx-background-color: #34495e; /* Hover background color */
+}
+
+.main-anchor {
+    -fx-alignment: center;
+    -fx-min-width: 600px; /* Set the minimum width */
+    -fx-min-height: 400px; /* Set the minimum height */
+    -fx-pref-width: 100%; /* Set preferred width to occupy available width */
+    -fx-pref-height: 100%; /* Set preferred height to occupy available height */
+}
+
+.image-with-fading-shadow {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 0) innershadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 0);
+}
+
+
+
+
+
+

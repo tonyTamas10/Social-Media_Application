@@ -32,7 +32,7 @@ public class MainApp extends Application {
         initializeService();
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
             Parent root = loader.load();
 
             MainController controller = loader.getController();

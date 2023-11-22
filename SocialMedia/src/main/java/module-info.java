@@ -12,6 +12,4 @@ module com.example.socialmedia {
     requires com.almasb.fxgl.all;
     requires java.sql;
 
-    opens com.example.socialmedia to javafx.fxml;
-    exports com.example.socialmedia;
 }
