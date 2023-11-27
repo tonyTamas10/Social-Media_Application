@@ -1,38 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Rectangle2D?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.effect.Blend?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="300.0" prefWidth="600.0" styleClass="main-anchor" stylesheets="@../../../Stylesheets/styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialmedia.ui.MainApp">
+<AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="main-anchor" stylesheets="@../../../Stylesheets/styles.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialmedia.controllers.MainController">
    <children>
-      <ImageView fitHeight="400.0" fitWidth="601.0" layoutX="-1.0" pickOnBounds="true">
-         <image>
-            <Image url="@../../../Images/Artboard 1.png" />
-         </image>
-         <viewport>
-            <Rectangle2D />
-         </viewport>
-      </ImageView>
-      <Pane prefHeight="300.0" prefWidth="600.0" styleClass="background-pane" stylesheets="@../../../Stylesheets/styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Pane styleClass="background-pane" stylesheets="@../../../Stylesheets/styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <effect>
             <Blend />
          </effect>
          <children>
-            <VBox alignment="CENTER" layoutX="216.0" layoutY="95.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="157.0" spacing="10.0">
+            <VBox alignment="CENTER" layoutX="422.0" layoutY="200.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="157.0" spacing="10.0">
                <children>
                   <ImageView fitHeight="68.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" styleClass="image-with-fading-shadow">
                      <image>
                         <Image url="@../../../Images/user.png" />
                      </image>
                   </ImageView>
-                  <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" stylesheets="@../../../Stylesheets/styles.css" text="Log In" textAlignment="CENTER" />
-                  <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" stylesheets="@../../../Stylesheets/styles.css" text="Register" textAlignment="CENTER" />
+                  <Button fx:id="logInButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onLoginButtonClick" styleClass="buttons" stylesheets="@../../../Stylesheets/styles.css" text="Log In" textAlignment="CENTER" />
+                  <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" styleClass="buttons" stylesheets="@../../../Stylesheets/styles.css" text="Register" textAlignment="CENTER" />
                </children>
             </VBox>
          </children>

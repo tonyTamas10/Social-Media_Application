@@ -1,14 +1,12 @@
 .background-pane {
     -fx-background-size: cover;
-    -fx-background-image: url("./Images/Artboard 1.png");
+    -fx-background-image: url('/Images/background.png');
     -fx-alignment: center;
+    -fx-pref-width: 100%;
+    -fx-pref-height: 100%;
 }
 
-/* Add this CSS code to your stylesheet */
-
-/* Add this CSS code to your stylesheet */
-
-.button {
+.buttons {
     -fx-background-color: #f48c06; /* Background color */
     -fx-text-fill: white; /* Text color */
     -fx-font-size: 14px; /* Font size */
@@ -21,24 +19,41 @@
     -fx-alignment: center; /* Text alignment */
 }
 
-.button:hover {
-    -fx-background-color: #34495e; /* Hover background color */
+.buttons:hover {
+    -fx-background-color: #14213D; /* Hover background color */
 }
 
 .main-anchor {
     -fx-alignment: center;
-    -fx-min-width: 600px; /* Set the minimum width */
-    -fx-min-height: 400px; /* Set the minimum height */
+    -fx-min-width: 1000px;
+    -fx-min-height: 600px;
     -fx-pref-width: 100%; /* Set preferred width to occupy available width */
     -fx-pref-height: 100%; /* Set preferred height to occupy available height */
+    -fx-background-color: #ffffff;
 }
 
 .image-with-fading-shadow {
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 0) innershadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 0);
 }
 
+.split-pane {
+    -fx-min-width: 1000px;
+    -fx-min-height: 400px;
+    -fx-pref-width: 100%;
+    -fx-pref-height: 100%;
+    -fx-alignment: center;
+}
 
+.windows-buttons {
+    -fx-max-height: 10px;
+    -fx-max-width: 10px;
+    -fx-pref-height: 100%;
+    -fx-pref-width: 100%;
+    -fx-background-color: transparent; /* Set background color to transparent */
+    -fx-border-color: transparent; /* Set border color to transparent */
+}
 
-
-
-
+.icons {
+    -fx-max-width: 17px;
+    -fx-max-height: 20px;
+}

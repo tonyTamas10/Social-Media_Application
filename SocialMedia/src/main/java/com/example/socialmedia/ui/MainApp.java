@@ -1,19 +1,21 @@
 // MainApp.java
 package com.example.socialmedia.ui;
 
-import com.example.socialmedia.controllers.MainController;
 import com.example.socialmedia.ro.ubbcluj.map.config.DatabaseConfig;
 import com.example.socialmedia.ro.ubbcluj.map.config.DatabaseManager;
+import com.example.socialmedia.ro.ubbcluj.map.domain.Friendship;
+import com.example.socialmedia.ro.ubbcluj.map.domain.Tuple;
 import com.example.socialmedia.ro.ubbcluj.map.domain.User;
 import com.example.socialmedia.ro.ubbcluj.map.domain.validators.UserValidator;
+import com.example.socialmedia.ro.ubbcluj.map.repository.Repository;
 import com.example.socialmedia.ro.ubbcluj.map.repository.database.FriendshipDBRepository;
 import com.example.socialmedia.ro.ubbcluj.map.repository.database.UserDBRepository;
 import com.example.socialmedia.ro.ubbcluj.map.service.Service;
 import com.example.socialmedia.ro.ubbcluj.map.service.ServiceComponent;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -28,29 +30,25 @@ public class MainApp extends Application {
     }
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws IOException {
         initializeService();
 
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
-            Parent root = loader.load();
+        initView(stage);
+        stage.show();
+    }
 
-            MainController controller = loader.getController();
-            controller.setService(service);
-
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle("Social Network App");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void initView(Stage stage) throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/com/example/socialmedia/main.fxml"));
+        AnchorPane layout = loader.load();
+        stage.setScene(new Scene(layout));
+        stage.setTitle("Social Media");
     }
 
     private void initializeService() {
         DatabaseManager databaseManager = new DatabaseManager(DatabaseConfig.DB_URL, DatabaseConfig.DB_USER, DatabaseConfig.DB_PASS);
-        UserDBRepository userRepository = new UserDBRepository(databaseManager);
-        FriendshipDBRepository friendshipRepository = new FriendshipDBRepository(databaseManager, userRepository);
+        Repository<UUID, User> userRepository = new UserDBRepository(databaseManager);
+        Repository<Tuple<UUID, UUID>, Friendship> friendshipRepository = new FriendshipDBRepository(databaseManager, userRepository);
         UserValidator userValidator = new UserValidator();
         service = new ServiceComponent(userValidator, userRepository, friendshipRepository);
     }
