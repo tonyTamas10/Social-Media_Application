@@ -2,26 +2,32 @@
 package com.example.socialmedia.controllers;
 
 import com.example.socialmedia.ro.ubbcluj.map.domain.User;
-import com.example.socialmedia.ro.ubbcluj.map.service.Service;
+import com.example.socialmedia.ro.ubbcluj.map.service.ServiceComponent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.UUID;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class MainController {
+public class MainController implements Initializable {
 
     @FXML
     private Button logInButton;
-    private Service<UUID, User> service;
+    private ServiceComponent service;
+
+    @FXML
+    private ListView<User> users;
 
     @FXML
     private TextField firstNameField;
@@ -38,8 +44,13 @@ public class MainController {
     @FXML
     private Label statusLabel;
 
-    public void setService(Service<UUID, User> service) {
+    public void setService(ServiceComponent service) {
         this.service = service;
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
     }
 
     @FXML
@@ -51,6 +62,9 @@ public class MainController {
         AnchorPane layout = loader.load();
         Scene scene = new Scene(layout);
         stage.setScene(scene);
+
+        AppWindowController controller = loader.getController();
+        controller.setService(service);
 
         stage.show();
     }

@@ -68,3 +68,5 @@ n
 >src/main/java/com/example/socialmedia/controllers/Friends.java,6/d/6d9d2a5e33f4cee78e549e5a46ec2801aecdac73
 x
 Hsrc/main/java/com/example/socialmedia/controllers/FriendsController.java,6/2/62c36a83bd9a321461f4862a4e4f5348f8411da9
+z
+Jsrc/main/java/com/example/socialmedia/controllers/AppWindowController.java,0/2/02e97d9d7d90c4eb41289f76557358f5a8797f53

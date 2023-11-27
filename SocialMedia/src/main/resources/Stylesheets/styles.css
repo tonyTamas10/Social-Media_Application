@@ -29,7 +29,8 @@
     -fx-min-height: 600px;
     -fx-pref-width: 100%; /* Set preferred width to occupy available width */
     -fx-pref-height: 100%; /* Set preferred height to occupy available height */
-    -fx-background-color: #ffffff;
+    -fx-background-size: cover;
+    -fx-background-image: url('/Images/background.png');
 }
 
 .image-with-fading-shadow {
@@ -38,7 +39,7 @@
 
 .split-pane {
     -fx-min-width: 1000px;
-    -fx-min-height: 400px;
+    -fx-min-height: 500px;
     -fx-pref-width: 100%;
     -fx-pref-height: 100%;
     -fx-alignment: center;

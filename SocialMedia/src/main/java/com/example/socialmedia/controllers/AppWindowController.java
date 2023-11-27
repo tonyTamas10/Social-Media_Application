@@ -1,7 +1,6 @@
 package com.example.socialmedia.controllers;
 
-import com.example.socialmedia.ro.ubbcluj.map.domain.User;
-import com.example.socialmedia.ro.ubbcluj.map.service.Service;
+import com.example.socialmedia.ro.ubbcluj.map.service.ServiceComponent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,15 +11,18 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.UUID;
 
-public class AppWindowControlller {
+public class AppWindowController {
 
     @FXML
     public Button profileButton;
     @FXML
     public Button friendsButton;
-    private Service<UUID, User> service;
+    private ServiceComponent service;
+
+    public void setService(ServiceComponent service) {
+        this.service = service;
+    }
 
     @FXML
     protected void onProfileButtonClick(ActionEvent event) throws IOException {
@@ -44,6 +46,9 @@ public class AppWindowControlller {
         AnchorPane layout = loader.load();
         Scene scene = new Scene(layout);
         stage.setScene(scene);
+
+        FriendsController controller = loader.getController();
+        controller.setService(service);
 
         stage.show();
     }

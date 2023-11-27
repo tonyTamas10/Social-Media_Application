@@ -18,5 +18,9 @@ module com.example.socialmedia {
     exports com.example.socialmedia.ro.ubbcluj.map;
     exports com.example.socialmedia.ui;
     exports com.example.socialmedia.controllers;
+    exports com.example.socialmedia.ro.ubbcluj.map.service;
+    exports com.example.socialmedia.ro.ubbcluj.map.domain;
+    exports com.example.socialmedia.ro.ubbcluj.map.repository;
+
 }
 

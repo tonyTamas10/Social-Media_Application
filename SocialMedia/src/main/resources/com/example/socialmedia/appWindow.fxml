@@ -2,14 +2,15 @@
 
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.effect.Glow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="main-anchor" stylesheets="@../../../Stylesheets/styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialmedia.controllers.AppWindowControlller">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="main-anchor" stylesheets="@../../../Stylesheets/styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialmedia.controllers.AppWindowController">
    <children>
-      <HBox alignment="CENTER" layoutX="368.0" layoutY="511.0" prefHeight="60.0" prefWidth="265.0" spacing="10.0">
+      <HBox alignment="CENTER" layoutX="368.0" layoutY="270.0" prefHeight="60.0" prefWidth="265.0" spacing="10.0">
          <children>
              <Button fx:id="profileButton" alignment="CENTER" maxHeight="28.0" maxWidth="23.0" mnemonicParsing="false" onAction="#onProfileButtonClick" prefHeight="28.0" prefWidth="0.0" styleClass="windows-buttons" stylesheets="@../../../Stylesheets/styles.css">
                <graphic>
@@ -18,8 +19,17 @@
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
+                     <effect>
+                        <Glow />
+                     </effect>
                      </ImageView>
                </graphic>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <effect>
+                  <Glow />
+               </effect>
              </Button>
             <Button fx:id="friendsButton" alignment="CENTER" layoutX="106.0" layoutY="10.0" maxHeight="28.0" maxWidth="23.0" mnemonicParsing="false" onAction="#onFriendsButtonClick" prefHeight="28.0" prefWidth="0.0" styleClass="windows-buttons" stylesheets="@../../../Stylesheets/styles.css">
                <graphic>
@@ -30,8 +40,14 @@
                      <image>
                         <Image url="@../../../Images/friends.png" />
                      </image>
+                     <effect>
+                        <Glow />
+                     </effect>
                   </ImageView>
                </graphic>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </Button>
             <Button alignment="CENTER" layoutX="65.0" layoutY="10.0" maxHeight="28.0" maxWidth="23.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="0.0" styleClass="windows-buttons" stylesheets="@../../../Stylesheets/styles.css">
                <graphic>
@@ -42,8 +58,14 @@
                      <image>
                         <Image url="@../../../Images/logOut.png" />
                      </image>
+                     <effect>
+                        <Glow />
+                     </effect>
                   </ImageView>
                </graphic>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </Button>
          </children>
       </HBox>
