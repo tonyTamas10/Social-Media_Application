@@ -1,6 +1,8 @@
 package com.example.socialmedia.controllers;
 
+import com.example.socialmedia.ro.ubbcluj.map.repository.RepositoryException;
 import com.example.socialmedia.ro.ubbcluj.map.service.ServiceComponent;
+import com.example.socialmedia.ro.ubbcluj.map.service.ServiceException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -38,7 +40,7 @@ public class AppWindowController {
     }
 
     @FXML
-    protected void onFriendsButtonClick(ActionEvent event) throws IOException {
+    protected void onFriendsButtonClick(ActionEvent event) throws IOException, ServiceException, RepositoryException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/com/example/socialmedia/friends.fxml"));
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -49,6 +51,7 @@ public class AppWindowController {
 
         FriendsController controller = loader.getController();
         controller.setService(service);
+        controller.initializeTable(); // calling initializeTable from here to have the service initialized
 
         stage.show();
     }

@@ -16,6 +16,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class FriendsController {
@@ -28,6 +30,10 @@ public class FriendsController {
 
     private ServiceComponent service;
 
+    @FXML
+    public void initialize() {
+        // this is empty so when the load method is called it won't use uninitialized components
+    }
 
     public void setService(ServiceComponent service) {
         this.service = service;
@@ -49,22 +55,24 @@ public class FriendsController {
         stage.show();
     }
 
-    public void initialize() throws ServiceException, RepositoryException {
-        // Initialize ListView with users
-        List<User> userList = (List<User>) service.findAll(); // Assuming getAll() retrieves all users
+    public void initializeTable() throws ServiceException, RepositoryException {
+        Collection<User> userCollection = (Collection<User>) service.findAll();
+
+        List<User> userList = new ArrayList<>(userCollection);
+
         listView.getItems().addAll(userList);
 
-        // Set a custom cell factory if needed
-        listView.setCellFactory(param -> new ListCell<User>() {
+        listView.setCellFactory(param -> new ListCell<>() {
             @Override
             protected void updateItem(User user, boolean empty) {
                 super.updateItem(user, empty);
                 if (empty || user == null) {
                     setText(null);
                 } else {
-                    setText(user.getFirstName()); // Set the appropriate user property
+                    setText(user.getFirstName() + " " + user.getLastName() + " " + user.getEmail()); // Set the appropriate user property
                 }
             }
         });
     }
+
 }

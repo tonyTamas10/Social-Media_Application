@@ -60,12 +60,8 @@ Esrc/main/java/com/example/socialmedia/controllers/MainController.java,7/1/71ca
 .gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
 d
 4src/main/resources/com/example/socialmedia/main.fxml,8/d/8dec3aba4ccd1e9af88e0d4a692735308cdec60d
-{
-Ksrc/main/java/com/example/socialmedia/controllers/AppWindowControlller.java,2/7/27f6658d47df752b62171ffc27beb08a7c758573
 x
 Hsrc/main/java/com/example/socialmedia/controllers/ProfileController.java,5/4/5474a623f760f759ad025971e3cdb33997813921
-n
->src/main/java/com/example/socialmedia/controllers/Friends.java,6/d/6d9d2a5e33f4cee78e549e5a46ec2801aecdac73
 x
 Hsrc/main/java/com/example/socialmedia/controllers/FriendsController.java,6/2/62c36a83bd9a321461f4862a4e4f5348f8411da9
 z

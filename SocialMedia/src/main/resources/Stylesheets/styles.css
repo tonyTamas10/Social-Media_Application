@@ -7,7 +7,7 @@
 }
 
 .buttons {
-    -fx-background-color: #f48c06; /* Background color */
+    -fx-background-color: #A4C3B2; /* Background color */
     -fx-text-fill: white; /* Text color */
     -fx-font-size: 14px; /* Font size */
     -fx-background-radius: 10; /* Border radius */
@@ -20,7 +20,7 @@
 }
 
 .buttons:hover {
-    -fx-background-color: #14213D; /* Hover background color */
+    -fx-background-color: #CCE3DE; /* Hover background color */
 }
 
 .main-anchor {
@@ -52,9 +52,44 @@
     -fx-pref-width: 100%;
     -fx-background-color: transparent; /* Set background color to transparent */
     -fx-border-color: transparent; /* Set border color to transparent */
+    -fx-scale-x: 1.0;
+    -fx-scale-y: 1.0;
+
+    /* Set initial transition properties */
+    -fx-transition: -fx-scale-x 0.6s, -fx-scale-y 0.6s;
+}
+
+.windows-buttons:hover {
+    /* Apply the zoom effect on hover */
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
 }
 
 .icons {
     -fx-max-width: 17px;
     -fx-max-height: 20px;
 }
+
+.listView {
+    -fx-background-radius: 30px; /* Set the background radius */
+    -fx-border-radius: 30px; /* Set the border radius */
+    -fx-border-color: white; /* Set the border color to white */
+    -fx-border-width: 2px; /* Set the border width */
+    -fx-background-color: #ffffff; /* Set the background color */
+    -fx-effect: dropshadow(three-pass-box, #CCE3DE, 15, 0.1, 0, 2); /* Increase blur radius for a more obvious shadow */
+}
+
+.list-cell:filled {
+    -fx-background-radius: 15px; /* Set background radius */
+    -fx-padding: 13px; /* Adjust padding as needed */
+    -fx-background-color: #ffffff; /* Set background color to white */
+    -fx-effect: dropshadow(three-pass-box, #CCE3DE, 10, 0.1, 0, 0); /* Set shadow properties */
+}
+
+.list-cell:selected:filled {
+    -fx-background-color: #EAF4F4; /* Set selected background color */
+    -fx-border-radius: 15px;
+    -fx-text-fill: #000;
+}
+
+
