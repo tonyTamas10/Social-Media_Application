@@ -36,6 +36,9 @@ public class AppWindowController {
         Scene scene = new Scene(layout);
         stage.setScene(scene);
 
+        ProfileController controller = loader.getController();
+        controller.setService(service);
+
         stage.show();
     }
 

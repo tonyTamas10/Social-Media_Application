@@ -38,6 +38,7 @@ public class MainApp extends Application {
         service = new ServiceComponent(userValidator, userRepository, friendshipRepository);
 
         initView(stage);
+        stage.setResizable(true);
         stage.show();
     }
 

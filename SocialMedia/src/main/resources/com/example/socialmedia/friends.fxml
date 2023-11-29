@@ -11,13 +11,13 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-image: none; -fx-background-color: e9ecef;" styleClass="main-anchor" stylesheets="@../../../Stylesheets/styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialmedia.controllers.FriendsController">
     <children>
-      <ListView layoutX="18.0" layoutY="16.0" prefHeight="480.0" prefWidth="322.0" styleClass="listView" />
-      <ListView fx:id="listView" layoutX="368.0" layoutY="14.0" prefHeight="480.0" prefWidth="615.0" styleClass="listView" stylesheets="@../../../Stylesheets/styles.css">
+      <ListView fx:id="listView" layoutX="356.0" layoutY="14.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="480.0" prefWidth="630.0" styleClass="listView" stylesheets="@../../../Stylesheets/styles.css" AnchorPane.leftAnchor="356.0" AnchorPane.rightAnchor="14.0">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </ListView>
-        <HBox alignment="CENTER" layoutX="368.0" layoutY="511.0" prefHeight="60.0" prefWidth="265.0" spacing="10.0">
+      <ListView layoutX="18.0" layoutY="16.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="480.0" prefWidth="322.0" styleClass="listView" />
+        <HBox alignment="CENTER" layoutX="368.0" layoutY="511.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="60.0" prefWidth="265.0" spacing="10.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <children>
                 <Button fx:id="profileButton" alignment="CENTER" maxHeight="28.0" maxWidth="23.0" mnemonicParsing="false" onAction="#onProfileButtonClick" prefHeight="28.0" prefWidth="0.0" styleClass="windows-buttons" stylesheets="@../../../Stylesheets/styles.css">
                     <graphic>
