@@ -75,4 +75,8 @@ public class FriendsController {
         });
     }
 
+    @FXML
+    public void onAddButtonClick(ActionEvent event) {
+
+    }
 }

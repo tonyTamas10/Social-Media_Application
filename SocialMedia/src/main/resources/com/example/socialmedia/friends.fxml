@@ -73,5 +73,11 @@
                 </Button>
             </children>
         </HBox>
+      <HBox alignment="CENTER" layoutX="571.0" layoutY="394.0" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+         <children>
+            <Button mnemonicParsing="false" styleClass="buttons" text="Add" textAlignment="CENTER" />
+            <Button mnemonicParsing="false" styleClass="buttons" text="Remove" />
+         </children>
+      </HBox>
     </children>
 </AnchorPane>

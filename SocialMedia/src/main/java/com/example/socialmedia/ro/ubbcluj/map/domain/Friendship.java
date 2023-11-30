@@ -2,11 +2,12 @@ package com.example.socialmedia.ro.ubbcluj.map.domain;
 
 import com.example.socialmedia.ro.ubbcluj.map.repository.Repository;
 import com.example.socialmedia.ro.ubbcluj.map.repository.RepositoryException;
-import com.example.socialmedia.ro.ubbcluj.map.service.ServiceException;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
+
+import static com.example.socialmedia.ro.ubbcluj.map.domain.FriendshipRequest.PENDING;
 
 
 public class Friendship extends Entity<Tuple<UUID, UUID>> {
@@ -15,19 +16,30 @@ public class Friendship extends Entity<Tuple<UUID, UUID>> {
     private final User user1;
 
     private final User user2;
+    private FriendshipRequest requstState;
 
-    public Friendship(Entity<Tuple<UUID, UUID>> userTuple, Repository<UUID, User> repo) throws ServiceException, RepositoryException {
+    public Friendship(Entity<Tuple<UUID, UUID>> userTuple, Repository<UUID, User> repo) throws RepositoryException {
         this.user1 = repo.findOne(userTuple.getId().getLeft()).get();
         this.user2 = repo.findOne(userTuple.getId().getRight()).get();
         this.setId(new Tuple<>(user1.getId(), user2.getId()));
         this.date = LocalDateTime.now();
+        this.requstState = PENDING;
     }
 
-    public Friendship(Entity<Tuple<UUID, UUID>> userTuple, LocalDateTime date, Repository<UUID, User> repo) throws ServiceException, RepositoryException {
+    public Friendship(Entity<Tuple<UUID, UUID>> userTuple, LocalDateTime date, Repository<UUID, User> repo) throws RepositoryException {
         this.user1 = repo.findOne(userTuple.getId().getLeft()).get();
         this.user2 = repo.findOne(userTuple.getId().getRight()).get();
         this.setId(new Tuple<>(user1.getId(), user2.getId()));
         this.date = date;
+        this.requstState = PENDING;
+    }
+
+    public Friendship(Entity<Tuple<UUID, UUID>> userTuple, LocalDateTime date, Repository<UUID, User> repo, FriendshipRequest request) throws RepositoryException {
+        this.user1 = repo.findOne(userTuple.getId().getLeft()).get();
+        this.user2 = repo.findOne(userTuple.getId().getRight()).get();
+        this.setId(new Tuple<>(user1.getId(), user2.getId()));
+        this.date = date;
+        this.requstState = request;
     }
 
     public User getUser1() {
@@ -44,6 +56,18 @@ public class Friendship extends Entity<Tuple<UUID, UUID>> {
      */
     public LocalDateTime getDate() {
         return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public FriendshipRequest getRequstState() {
+        return requstState;
+    }
+
+    public void setRequstState(FriendshipRequest requstState) {
+        this.requstState = requstState;
     }
 
     @Override

@@ -66,3 +66,9 @@ x
 Hsrc/main/java/com/example/socialmedia/controllers/FriendsController.java,6/2/62c36a83bd9a321461f4862a4e4f5348f8411da9
 z
 Jsrc/main/java/com/example/socialmedia/controllers/AppWindowController.java,0/2/02e97d9d7d90c4eb41289f76557358f5a8797f53
+x
+Hsrc/main/java/com/example/socialmedia/ro/ubbcluj/map/domain/Message.java,0/8/08952f1951c3e7a353cf6ad659037099af85feca
+}
+Msrc/main/java/com/example/socialmedia/ro/ubbcluj/map/domain/ReplyMessage.java,4/0/40b8502e996603a7fe158531dc095787f931c947
+‚
+Rsrc/main/java/com/example/socialmedia/ro/ubbcluj/map/domain/FriendshipRequest.java,3/4/3420de21fa596990702425a63b11983d0b7a6369
