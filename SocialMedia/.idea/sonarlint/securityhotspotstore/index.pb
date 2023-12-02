@@ -72,3 +72,7 @@ Hsrc/main/java/com/example/socialmedia/ro/ubbcluj/map/domain/Message.java,0/8/0
 Msrc/main/java/com/example/socialmedia/ro/ubbcluj/map/domain/ReplyMessage.java,4/0/40b8502e996603a7fe158531dc095787f931c947
 ‚
 Rsrc/main/java/com/example/socialmedia/ro/ubbcluj/map/domain/FriendshipRequest.java,3/4/3420de21fa596990702425a63b11983d0b7a6369
+€
+Psrc/main/java/com/example/socialmedia/ro/ubbcluj/map/service/MessageService.java,d/7/d7c453ade2564105d6c57b72707c5b630059adc7
+‰
+Ysrc/main/java/com/example/socialmedia/ro/ubbcluj/map/service/MessageServiceComponent.java,e/9/e9739bfa27dca0eef5978b29f56112f35ae01229

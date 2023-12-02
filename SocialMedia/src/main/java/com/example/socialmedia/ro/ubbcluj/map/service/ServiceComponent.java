@@ -1,13 +1,11 @@
 package com.example.socialmedia.ro.ubbcluj.map.service;
 
-import com.example.socialmedia.ro.ubbcluj.map.domain.Entity;
-import com.example.socialmedia.ro.ubbcluj.map.domain.Friendship;
-import com.example.socialmedia.ro.ubbcluj.map.domain.Tuple;
-import com.example.socialmedia.ro.ubbcluj.map.domain.User;
+import com.example.socialmedia.ro.ubbcluj.map.domain.*;
 import com.example.socialmedia.ro.ubbcluj.map.domain.validators.UserValidator;
 import com.example.socialmedia.ro.ubbcluj.map.repository.Repository;
 import com.example.socialmedia.ro.ubbcluj.map.repository.RepositoryException;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -47,10 +45,10 @@ public class ServiceComponent implements Service<UUID, User> {
         return entities;
     }
 
-    public User getUserByEmail(User user) throws RepositoryException {
+    public User getUserByEmail(String email) throws RepositoryException {
         Iterable<User> users = userRepository.findAll();
-        for(User other : users) {
-            if(user.getEmail().equals(other.getEmail()))
+        for(User user : users) {
+            if(email.equals(user.getEmail()))
                 return user;
         }
         return null;
@@ -58,7 +56,7 @@ public class ServiceComponent implements Service<UUID, User> {
 
     public void save(User entity) throws ServiceException, RepositoryException {
         validator.validate(entity);
-        if(getUserByEmail(entity) != null) {
+        if(getUserByEmail(entity.getEmail()) != null) {
             throw new ServiceException("An user with the email << " + entity.getEmail() + " >> already exists");
         }
 
@@ -337,5 +335,88 @@ public class ServiceComponent implements Service<UUID, User> {
         });
 
         return max[0] + 1;
+    }
+
+    /**
+     * accept a friend request from another user
+     * @param email1 - email of the user initiating the action
+     * @param email2 - email of the user wanted to form a friendship
+     *
+     */
+    public void acceptFriendship(String email1, String email2) throws ServiceException {
+        try {
+            deleteFriendship(getUserByEmail(email1), getUserByEmail(email2));
+            createFriendship(getUserByEmail(email1), getUserByEmail(email2), this);
+        } catch (Exception e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    /**
+     *
+     * @param email1 - email of the user initiating the action
+     * @param email2 - email of the user refused
+     */
+    public void declineFriendship(String email1, String email2) throws ServiceException {
+        Optional<Friendship> friendship;
+        User firstUser;
+        User secondUser;
+        try {
+            deleteFriendship(getUserByEmail(email1), getUserByEmail(email2));
+
+            if(email1 == null || email2 == null) {
+                throw new ServiceException("The emails must not be null");
+            }
+
+            firstUser = getUserByEmail(email1);
+            secondUser = getUserByEmail(email2);
+
+            validator.validate(firstUser);
+            validator.validate(secondUser);
+
+            var entity = new Entity<Tuple<UUID, UUID>>();
+            entity.setId(new Tuple<>(firstUser.getId(), secondUser.getId()));
+            friendship = friendshipRepository.save(new Friendship(entity, LocalDateTime.now(), userRepository , FriendshipRequest.REJECTED));
+        } catch (Exception e) {
+            throw new ServiceException(e.getMessage());
+        }
+
+        if(friendship.isPresent()) {
+            throw new ServiceException("These users are already friends");
+        }
+    }
+
+    /**
+     * sending a friend request to another user
+     * @param email1 - email of the user initiating the action
+     * @param email2 - email of the user refused
+     */
+    public void sendFriendRequest(String email1, String email2) throws ServiceException {
+        Optional<Friendship> friendship;
+        User firstUser;
+        User secondUser;
+        try {
+            deleteFriendship(getUserByEmail(email1), getUserByEmail(email2));
+
+            if(email1 == null || email2 == null) {
+                throw new ServiceException("The emails must not be null");
+            }
+
+            firstUser = getUserByEmail(email1);
+            secondUser = getUserByEmail(email2);
+
+            validator.validate(firstUser);
+            validator.validate(secondUser);
+
+            var entity = new Entity<Tuple<UUID, UUID>>();
+            entity.setId(new Tuple<>(firstUser.getId(), secondUser.getId()));
+            friendship = friendshipRepository.save(new Friendship(entity, LocalDateTime.now(), userRepository , FriendshipRequest.PENDING));
+        } catch (Exception e) {
+            throw new ServiceException(e.getMessage());
+        }
+
+        if(friendship.isPresent()) {
+            throw new ServiceException("These users are already friends");
+        }
     }
 }

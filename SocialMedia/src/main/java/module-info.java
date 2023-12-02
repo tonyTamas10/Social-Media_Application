@@ -21,6 +21,7 @@ module com.example.socialmedia {
     exports com.example.socialmedia.ro.ubbcluj.map.service;
     exports com.example.socialmedia.ro.ubbcluj.map.domain;
     exports com.example.socialmedia.ro.ubbcluj.map.repository;
+    exports com.example.socialmedia.ro.ubbcluj.map.domain.validators;
 
 }
 
