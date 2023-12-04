@@ -54,7 +54,7 @@ public class AppWindowController {
 
         FriendsController controller = loader.getController();
         controller.setService(service);
-        controller.initializeTable(); // calling initializeTable from here to have the service initialized
+        controller.initializeFriendsTable(); // calling method from here to have the service initialized
 
         stage.show();
     }

@@ -1,15 +1,20 @@
 package com.example.socialmedia.controllers;
 
+import com.example.socialmedia.ro.ubbcluj.map.domain.Friendship;
 import com.example.socialmedia.ro.ubbcluj.map.domain.User;
 import com.example.socialmedia.ro.ubbcluj.map.repository.RepositoryException;
+import com.example.socialmedia.ro.ubbcluj.map.service.MessageService;
 import com.example.socialmedia.ro.ubbcluj.map.service.ServiceComponent;
 import com.example.socialmedia.ro.ubbcluj.map.service.ServiceException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
@@ -26,9 +31,21 @@ public class FriendsController {
     public Button profileButton;
 
     @FXML
-    private ListView<User> listView;
+    public Button addButton;
+
+    private final ListView<User> listView = new ListView<>();
+
+    @FXML
+    private ListView<Friendship> friendshipListView;
 
     private ServiceComponent service;
+    private User user;
+    private MessageService messageService;
+
+    private final ObservableList<String> friends = FXCollections.observableArrayList();
+    private final ObservableList<String> friendsRequests = FXCollections.observableArrayList();
+    private final ObservableList<String> friendRequestsSend = FXCollections.observableArrayList();
+    private final ObservableList<String> users = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
@@ -37,6 +54,10 @@ public class FriendsController {
 
     public void setService(ServiceComponent service) {
         this.service = service;
+    }
+
+    public void initApp(User user) {
+
     }
 
     @FXML
@@ -56,6 +77,33 @@ public class FriendsController {
     }
 
     public void initializeTable() throws ServiceException, RepositoryException {
+
+    }
+
+    public void initializeFriendsTable() throws ServiceException, RepositoryException {
+        Collection<Friendship> friendshipCollection = (Collection<Friendship>) service.findAllFriendships();
+
+        List<Friendship> friendshipsList = new ArrayList<>(friendshipCollection);
+
+        //friendshipListView.getItems().addAll((Friendship) friendshipsList.stream().filter(friendship -> friendship.getRequstState().toString().equals("PENDING")));
+        friendshipListView.getItems().addAll(friendshipsList);
+        friendshipListView.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(Friendship friendship, boolean empty) {
+                super.updateItem(friendship, empty);
+                if (empty || friendship == null) {
+                    setText(null);
+                } else {
+                    setText(friendship.getUser1().getFirstName() + " " + friendship.getUser1().getLastName());
+                }
+            }
+        });
+    }
+
+    @FXML
+    public void onAddButtonClick(ActionEvent event) throws ServiceException, RepositoryException {
+        Dialog<ListView<User>> dialog = new Dialog<>();
+
         Collection<User> userCollection = (Collection<User>) service.findAll();
 
         List<User> userList = new ArrayList<>(userCollection);
@@ -73,10 +121,9 @@ public class FriendsController {
                 }
             }
         });
-    }
 
-    @FXML
-    public void onAddButtonClick(ActionEvent event) {
-
+        dialog.setGraphic(listView);
+        dialog.showAndWait();
+        //TODO: trebuie sa fac sa se inchida fereastra la click
     }
 }

@@ -1,7 +1,6 @@
 // MainController.java
 package com.example.socialmedia.controllers;
 
-import com.example.socialmedia.ro.ubbcluj.map.domain.User;
 import com.example.socialmedia.ro.ubbcluj.map.service.ServiceComponent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,9 +9,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -27,22 +23,7 @@ public class MainController implements Initializable {
     private ServiceComponent service;
 
     @FXML
-    private ListView<User> users;
-
-    @FXML
-    private TextField firstNameField;
-
-    @FXML
-    private TextField lastNameField;
-
-    @FXML
-    private TextField emailField;
-
-    @FXML
     private Button addUserButton;
-
-    @FXML
-    private Label statusLabel;
 
     public void setService(ServiceComponent service) {
         this.service = service;
@@ -56,7 +37,7 @@ public class MainController implements Initializable {
     @FXML
     protected void onLoginButtonClick(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/com/example/socialmedia/appWindow.fxml"));
+        loader.setLocation(getClass().getResource("/com/example/socialmedia/login.fxml"));
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 
         AnchorPane layout = loader.load();
@@ -69,18 +50,5 @@ public class MainController implements Initializable {
         stage.show();
     }
 
-    private void addUser() {
-        String firstName = firstNameField.getText();
-        String lastName = lastNameField.getText();
-        String email = emailField.getText();
-
-        try {
-            User newUser = new User(firstName, lastName, email);
-            service.save(newUser);
-            statusLabel.setText("User added: " + newUser);
-        } catch (Exception e) {
-            statusLabel.setText("Error: " + e.getMessage());
-        }
-    }
 }
 

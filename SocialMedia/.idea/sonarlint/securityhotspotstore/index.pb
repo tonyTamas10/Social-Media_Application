@@ -76,3 +76,5 @@ Rsrc/main/java/com/example/socialmedia/ro/ubbcluj/map/domain/FriendshipRequest.j
 Psrc/main/java/com/example/socialmedia/ro/ubbcluj/map/service/MessageService.java,d/7/d7c453ade2564105d6c57b72707c5b630059adc7
 ‰
 Ysrc/main/java/com/example/socialmedia/ro/ubbcluj/map/service/MessageServiceComponent.java,e/9/e9739bfa27dca0eef5978b29f56112f35ae01229
+v
+Fsrc/main/java/com/example/socialmedia/controllers/LoginController.java,6/c/6c8a55d399b0ec532ce594af84deac598abe4138
