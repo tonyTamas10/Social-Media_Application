@@ -44,7 +44,7 @@ public class MainController implements Initializable {
         Scene scene = new Scene(layout);
         stage.setScene(scene);
 
-        AppWindowController controller = loader.getController();
+        LoginController controller = loader.getController();
         controller.setService(service);
 
         stage.show();

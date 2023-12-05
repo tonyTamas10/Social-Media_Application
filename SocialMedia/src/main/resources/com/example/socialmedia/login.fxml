@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
@@ -38,18 +39,14 @@
                      <children>
                         <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                            <children>
-                              <Label alignment="CENTER" prefHeight="26.0" prefWidth="100.0" text="First Name" />
-                              <Label alignment="CENTER" prefHeight="26.0" prefWidth="100.0" text="Last Name" />
                               <Label alignment="CENTER" prefHeight="26.0" prefWidth="100.0" text="Email" />
                               <Label alignment="CENTER" prefHeight="26.0" prefWidth="100.0" text="Password" />
                            </children>
                         </VBox>
                         <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                            <children>
-                              <TextField />
-                              <TextField />
-                              <TextField />
-                              <PasswordField />
+                              <TextField fx:id="emailField" />
+                              <PasswordField fx:id="passwordField" />
                            </children>
                         </VBox>
                      </children>
@@ -57,6 +54,7 @@
                         <Insets top="10.0" />
                      </VBox.margin>
                   </HBox>
+                  <Button fx:id="loginButton" mnemonicParsing="false" onAction="#loginUser" styleClass="buttons" text="Log In" />
                     </children>
                 </VBox>
             </children>
