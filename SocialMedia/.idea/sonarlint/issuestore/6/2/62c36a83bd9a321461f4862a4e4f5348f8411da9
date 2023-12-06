@@ -1,7 +1,5 @@
 
-
-java:S1186;"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ş„’Ÿ8Ô±Ó«Ã1
-
-java:S1186O"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(Ø¨âÛ8­Ÿö¨Ã1
-T
-java:S1135"2Complete the task associated to this TODO comment.(Ëê¿§üÿÿÿÿ8îëú¨Ã1
+Q
+java:S1066H"/Merge this if statement with the enclosing one.(±ëõşÿÿÿÿ8”ĞšùÃ1
+u
+java:S14500"SRemove the "user" field and declare it as a local variable in the relevant methods.(’Ø¾ıÿÿÿÿ8ˆ…§ùÃ1

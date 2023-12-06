@@ -16,7 +16,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </ListView>
-      <ListView layoutX="18.0" layoutY="16.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="480.0" prefWidth="322.0" styleClass="listView" />
+      <ListView fx:id="friendRequestsListView" layoutX="18.0" layoutY="16.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="480.0" prefWidth="322.0" styleClass="listView" />
         <HBox alignment="CENTER" layoutX="368.0" layoutY="511.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="60.0" prefWidth="265.0" spacing="10.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <children>
                 <Button fx:id="profileButton" alignment="CENTER" maxHeight="28.0" maxWidth="23.0" mnemonicParsing="false" onAction="#onProfileButtonClick" prefHeight="28.0" prefWidth="0.0" styleClass="windows-buttons" stylesheets="@../../../Stylesheets/styles.css">

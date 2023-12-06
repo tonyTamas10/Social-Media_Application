@@ -11,19 +11,23 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 public class FriendsController {
 
@@ -37,6 +41,8 @@ public class FriendsController {
 
     @FXML
     private ListView<Friendship> friendshipListView;
+    @FXML
+    private ListView<String> friendRequestsListView;
 
     private ServiceComponent service;
     private User user;
@@ -56,8 +62,25 @@ public class FriendsController {
         this.service = service;
     }
 
-    public void initApp(User user) {
+    public void initApp(User user) throws ServiceException, RepositoryException {
+        this.user = user;
 
+        user.getFriends().forEach(friend -> friends.add(friend.getFirstName() + " " + friend.getLastName() + " " + friend.getEmail()));
+
+        service.findAllFriendships().forEach(friendship -> {
+            if(friendship.getUser2().getId().equals(user.getId())) {
+                if(Objects.equals(friendship.getRequstState().toString(), "PENDING")) {
+                    User friend = friendship.getUser1();
+                    friendsRequests.add(friend.getFirstName() + " " + friend.getLastName());
+                }
+            }
+        });
+
+        service.findAll().forEach(user1 -> {
+            if(!user1.getId().equals(user.getId())) {
+                users.add(user1.getFirstName() + " " + user1.getLastName() + " " + user1.getEmail());
+            }
+        });
     }
 
     @FXML
@@ -76,8 +99,17 @@ public class FriendsController {
         stage.show();
     }
 
-    public void initializeTable() throws ServiceException, RepositoryException {
+    public void initializeFriendRequestsTable() {
+        friendRequestsListView.getItems().removeAll();
+        friendRequestsListView.getItems().addAll(friendsRequests);
 
+        friendRequestsListView.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(item);
+            }
+        });
     }
 
     public void initializeFriendsTable() throws ServiceException, RepositoryException {
@@ -85,7 +117,8 @@ public class FriendsController {
 
         List<Friendship> friendshipsList = new ArrayList<>(friendshipCollection);
 
-        //friendshipListView.getItems().addAll((Friendship) friendshipsList.stream().filter(friendship -> friendship.getRequstState().toString().equals("PENDING")));
+        friendshipListView.getItems().addAll((Friendship) friendshipsList.stream().filter(friendship -> friendship.getRequstState().toString().equals("PENDING")));
+
         friendshipListView.getItems().addAll(friendshipsList);
         friendshipListView.setCellFactory(param -> new ListCell<>() {
             @Override
@@ -102,12 +135,12 @@ public class FriendsController {
 
     @FXML
     public void onAddButtonClick(ActionEvent event) throws ServiceException, RepositoryException {
-        Dialog<ListView<User>> dialog = new Dialog<>();
 
         Collection<User> userCollection = (Collection<User>) service.findAll();
 
         List<User> userList = new ArrayList<>(userCollection);
 
+        listView.getItems().removeAll(userList);
         listView.getItems().addAll(userList);
 
         listView.setCellFactory(param -> new ListCell<>() {
@@ -122,8 +155,41 @@ public class FriendsController {
             }
         });
 
-        dialog.setGraphic(listView);
-        dialog.showAndWait();
-        //TODO: trebuie sa fac sa se inchida fereastra la click
+        Stage stage = new Stage();
+        stage.setTitle("Add User");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initOwner(((Node)event.getSource()).getScene().getWindow());
+
+        GridPane gridPane = new GridPane();
+
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(10, 10, 10, 10));
+        gridPane.add(listView, 0, 0, 2, 1);
+
+        Button addFriendButton = new Button("Add");
+        Button cancelButton = new Button("Cancel");
+
+        addFriendButton.setOnAction(e -> {
+
+            User selectedUser = listView.getSelectionModel().getSelectedItem();
+
+            if (selectedUser != null) {
+
+                System.out.println("Added " + selectedUser.getFirstName() + " " + selectedUser.getLastName() + " as a friend.");
+            }
+            stage.close();
+        });
+        cancelButton.setOnAction(e -> stage.close());
+
+        gridPane.add(addFriendButton, 0, 1);
+        gridPane.add(cancelButton, 1, 1);
+
+        Scene scene = new Scene(gridPane, 400, 400);
+
+        stage.setScene(scene);
+
+        stage.show();
     }
 }
