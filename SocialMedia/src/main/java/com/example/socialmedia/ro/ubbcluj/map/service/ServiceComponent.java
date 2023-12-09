@@ -90,7 +90,7 @@ public class ServiceComponent implements Service<UUID, User> {
         }
         var friendshipEntity = new Entity<Tuple<UUID, UUID>>(); // creating an entity with a tupple
         friendshipEntity.setId(new Tuple<>(user1.getId(), user2.getId())); // setting the id's of the users in the tuple
-        Optional<Friendship> friendship = friendshipRepository.save(new Friendship(friendshipEntity, userRepository));
+        Optional<Friendship> friendship = friendshipRepository.save(new Friendship(friendshipEntity, LocalDateTime.now(), userRepository, FriendshipRequest.APPROVED));
 
         if(friendship.isPresent()) {
             throw new ServiceException("These users are already friends");
@@ -391,12 +391,11 @@ public class ServiceComponent implements Service<UUID, User> {
      * @param email1 - email of the user initiating the action
      * @param email2 - email of the user refused
      */
-    public void sendFriendRequest(String email1, String email2) throws ServiceException {
+    public Friendship sendFriendRequest(String email1, String email2) throws ServiceException {
         Optional<Friendship> friendship;
         User firstUser;
         User secondUser;
         try {
-            deleteFriendship(getUserByEmail(email1), getUserByEmail(email2));
 
             if(email1 == null || email2 == null) {
                 throw new ServiceException("The emails must not be null");
@@ -410,13 +409,12 @@ public class ServiceComponent implements Service<UUID, User> {
 
             var entity = new Entity<Tuple<UUID, UUID>>();
             entity.setId(new Tuple<>(firstUser.getId(), secondUser.getId()));
-            friendship = friendshipRepository.save(new Friendship(entity, LocalDateTime.now(), userRepository , FriendshipRequest.PENDING));
+            friendship = friendshipRepository.save(new Friendship(firstUser.getEmail(), secondUser.getEmail(), LocalDateTime.now(), this , FriendshipRequest.PENDING));
         } catch (Exception e) {
             throw new ServiceException(e.getMessage());
         }
 
-        if(friendship.isPresent()) {
-            throw new ServiceException("These users are already friends");
-        }
+        return friendship.orElse(null);
+
     }
 }

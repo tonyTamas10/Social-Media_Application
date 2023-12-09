@@ -99,10 +99,11 @@ public class UserDBRepository extends AbstractDBRepository<UUID, User> {
              ResultSet resultSet = statement.executeQuery()
         ) {
             while (resultSet.next()) {
+                UUID id = UUID.fromString(resultSet.getString("user_id"));
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
                 String email = resultSet.getString("email");
-                User user = new User(firstName, lastName, email);
+                User user = new User(id, firstName, lastName, email);
                 users.add(user);
             }
             return users;

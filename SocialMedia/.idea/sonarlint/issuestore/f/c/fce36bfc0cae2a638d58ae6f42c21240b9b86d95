@@ -1,13 +1,15 @@
 
-m
-java:S3655"PCall "Optional#isPresent()" or "!Optional#isEmpty()" before accessing the value.(”½Í²8£ĞÒÒÃ1
 r
-java:S3655"PCall "Optional#isPresent()" or "!Optional#isEmpty()" before accessing the value.(½ƒüşÿÿÿÿ8¤ĞÒÒÃ1
+java:S3655("PCall "Optional#isPresent()" or "!Optional#isEmpty()" before accessing the value.(½ƒüşÿÿÿÿ8õ¹ÑÄ1
 m
-java:S3655"PCall "Optional#isPresent()" or "!Optional#isEmpty()" before accessing the value.(”½Í²8¤ĞÒÒÃ1
-r
-java:S3655&"PCall "Optional#isPresent()" or "!Optional#isEmpty()" before accessing the value.(½ƒüşÿÿÿÿ8¤ĞÒÒÃ1
-r
-java:S3655"PCall "Optional#isPresent()" or "!Optional#isEmpty()" before accessing the value.(½ƒüşÿÿÿÿ8¤ĞÒÒÃ1
+java:S3655)"PCall "Optional#isPresent()" or "!Optional#isEmpty()" before accessing the value.(”½Í²8õ¹ÑÄ1
 m
-java:S3655'"PCall "Optional#isPresent()" or "!Optional#isEmpty()" before accessing the value.(”½Í²8¤ĞÒÒÃ1
+java:S3655"PCall "Optional#isPresent()" or "!Optional#isEmpty()" before accessing the value.(”½Í²8»í½ÑÄ1
+r
+java:S3655 "PCall "Optional#isPresent()" or "!Optional#isEmpty()" before accessing the value.(½ƒüşÿÿÿÿ8õ¹ÑÄ1
+r
+java:S3655"PCall "Optional#isPresent()" or "!Optional#isEmpty()" before accessing the value.(½ƒüşÿÿÿÿ8»í½ÑÄ1
+m
+java:S3655!"PCall "Optional#isPresent()" or "!Optional#isEmpty()" before accessing the value.(”½Í²8õ¹ÑÄ1
+»
+java:S1130/"Remove the declaration of thrown exception 'com.example.socialmedia.ro.ubbcluj.map.service.ServiceException', as it cannot be thrown from constructor's body.(›¶†ü8ú¹ÑÄ1

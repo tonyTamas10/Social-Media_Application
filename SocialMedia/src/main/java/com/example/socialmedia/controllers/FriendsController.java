@@ -20,8 +20,10 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,14 +44,14 @@ public class FriendsController {
     @FXML
     private ListView<Friendship> friendshipListView;
     @FXML
-    private ListView<String> friendRequestsListView;
+    private ListView<Pair<String, String>> friendRequestsListView;
 
     private ServiceComponent service;
     private User user;
     private MessageService messageService;
 
     private final ObservableList<String> friends = FXCollections.observableArrayList();
-    private final ObservableList<String> friendsRequests = FXCollections.observableArrayList();
+    private final ObservableList<Pair<String, String>> friendsRequests = FXCollections.observableArrayList();
     private final ObservableList<String> friendRequestsSend = FXCollections.observableArrayList();
     private final ObservableList<String> users = FXCollections.observableArrayList();
 
@@ -65,17 +67,20 @@ public class FriendsController {
     public void initApp(User user) throws ServiceException, RepositoryException {
         this.user = user;
 
+        // finding all friends of the user
         user.getFriends().forEach(friend -> friends.add(friend.getFirstName() + " " + friend.getLastName() + " " + friend.getEmail()));
 
+        // finding all the friend requests for the user that logged in
         service.findAllFriendships().forEach(friendship -> {
             if(friendship.getUser2().getId().equals(user.getId())) {
                 if(Objects.equals(friendship.getRequstState().toString(), "PENDING")) {
                     User friend = friendship.getUser1();
-                    friendsRequests.add(friend.getFirstName() + " " + friend.getLastName());
+                    friendsRequests.add(new Pair<>(friend.getFirstName() + " " + friend.getLastName(), friend.getEmail()));
                 }
             }
         });
 
+        // finding all the users other than the user that logged in
         service.findAll().forEach(user1 -> {
             if(!user1.getId().equals(user.getId())) {
                 users.add(user1.getFirstName() + " " + user1.getLastName() + " " + user1.getEmail());
@@ -103,11 +108,36 @@ public class FriendsController {
         friendRequestsListView.getItems().removeAll();
         friendRequestsListView.getItems().addAll(friendsRequests);
 
-        friendRequestsListView.setCellFactory(param -> new ListCell<>() {
+        friendRequestsListView.setCellFactory(param -> new ListCell<Pair<String, String>>() {
+            private Button acceptRequest = new Button("Accept");
+            private Button declineRequest = new Button("Decline");
             @Override
-            protected void updateItem(String item, boolean empty) {
+            protected void updateItem(Pair<String, String> item, boolean empty) {
                 super.updateItem(item, empty);
-                setText(item);
+
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    setText(item.getKey());
+                    setGraphic(new HBox(acceptRequest, declineRequest));
+
+                    acceptRequest.setOnAction(event -> {
+                        try {
+                            // TODO: nu dispare requestul si nu se salveaza prietenia cu noul request state
+                            service.acceptFriendship(user.getEmail(), item.getValue());
+                            // Optionally, you can update the UI or remove the item from the list
+                            friendsRequests.remove(item);
+                            initializeFriendRequestsTable();
+                        } catch (ServiceException e) {
+                            System.out.println("Error at accepting request");
+                        }
+                    });
+
+                    declineRequest.setOnAction(event -> {
+                        // Implement logic for declining the friendship if needed
+                    });
+                }
             }
         });
     }
@@ -117,9 +147,7 @@ public class FriendsController {
 
         List<Friendship> friendshipsList = new ArrayList<>(friendshipCollection);
 
-        friendshipListView.getItems().addAll((Friendship) friendshipsList.stream().filter(friendship -> friendship.getRequstState().toString().equals("PENDING")));
-
-        friendshipListView.getItems().addAll(friendshipsList);
+        friendshipListView.getItems().addAll(friendshipsList.stream().filter(friendship -> friendship.getRequstState().toString().equals("APPROVED")).toList());
         friendshipListView.setCellFactory(param -> new ListCell<>() {
             @Override
             protected void updateItem(Friendship friendship, boolean empty) {
@@ -155,6 +183,7 @@ public class FriendsController {
             }
         });
 
+        // setting up a dialog for the add friend button from the main screen
         Stage stage = new Stage();
         stage.setTitle("Add User");
         stage.initModality(Modality.APPLICATION_MODAL);
@@ -171,16 +200,27 @@ public class FriendsController {
         Button addFriendButton = new Button("Add");
         Button cancelButton = new Button("Cancel");
 
-        addFriendButton.setOnAction(e -> {
+        addFriendButton.setOnAction(e -> { // setting an action for the add friend button
 
             User selectedUser = listView.getSelectionModel().getSelectedItem();
 
             if (selectedUser != null) {
 
-                System.out.println("Added " + selectedUser.getFirstName() + " " + selectedUser.getLastName() + " as a friend.");
+                Friendship potentialFriendship = null;
+                try {
+                    // creating a friendship object with the request state PENDING
+                    potentialFriendship = service.sendFriendRequest(this.user.getEmail(), selectedUser.getEmail());
+                } catch (ServiceException ex) {
+                    System.out.println("Error adding a friend");
+                }
+
+                if(potentialFriendship != null) {
+                    this.friendRequestsSend.add(potentialFriendship.getUser2().getEmail());
+                }
             }
             stage.close();
         });
+        // implementing the cancel button functionality
         cancelButton.setOnAction(e -> stage.close());
 
         gridPane.add(addFriendButton, 0, 1);

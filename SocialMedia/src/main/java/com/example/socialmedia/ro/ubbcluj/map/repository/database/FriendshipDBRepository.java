@@ -1,10 +1,7 @@
 package com.example.socialmedia.ro.ubbcluj.map.repository.database;
 
 import com.example.socialmedia.ro.ubbcluj.map.config.DatabaseManager;
-import com.example.socialmedia.ro.ubbcluj.map.domain.Entity;
-import com.example.socialmedia.ro.ubbcluj.map.domain.Friendship;
-import com.example.socialmedia.ro.ubbcluj.map.domain.Tuple;
-import com.example.socialmedia.ro.ubbcluj.map.domain.User;
+import com.example.socialmedia.ro.ubbcluj.map.domain.*;
 import com.example.socialmedia.ro.ubbcluj.map.repository.Repository;
 import com.example.socialmedia.ro.ubbcluj.map.repository.RepositoryException;
 
@@ -79,6 +76,7 @@ public class FriendshipDBRepository extends AbstractDBRepository<Tuple<UUID, UUI
 
                 UUID id1 = UUID.fromString(resultSet.getString("user1_id"));
                 UUID id2 = UUID.fromString(resultSet.getString("user2_id"));
+                String requestState = resultSet.getString("request_state");
                 //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 Timestamp timestamp = resultSet.getTimestamp("friendsfrom");
                 LocalDateTime date = timestamp.toLocalDateTime();
@@ -89,6 +87,7 @@ public class FriendshipDBRepository extends AbstractDBRepository<Tuple<UUID, UUI
                 var entity = new Entity<Tuple<UUID, UUID>>();
                 entity.setId(new Tuple<>(id1, id2));
                 friendship = new Friendship(entity, date, repo);
+                friendship.setRequstState(FriendshipRequest.valueOf(requestState));
 
                 Friendship finalFriendship = friendship;
                 user1.ifPresent(user -> user.addFriend(finalFriendship.getUser2()));
