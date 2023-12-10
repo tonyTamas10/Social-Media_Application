@@ -89,7 +89,7 @@ public class ServiceComponent implements Service<UUID, User> {
             throw new ServiceException("There must be 2 different users");
         }
         var friendshipEntity = new Entity<Tuple<UUID, UUID>>(); // creating an entity with a tupple
-        friendshipEntity.setId(new Tuple<>(user1.getId(), user2.getId())); // setting the id's of the users in the tuple
+        friendshipEntity.setId(new Tuple<>(user2.getId(), user1.getId())); // setting the id's of the users in the tuple
         Optional<Friendship> friendship = friendshipRepository.save(new Friendship(friendshipEntity, LocalDateTime.now(), userRepository, FriendshipRequest.APPROVED));
 
         if(friendship.isPresent()) {
@@ -114,28 +114,29 @@ public class ServiceComponent implements Service<UUID, User> {
             throw new ServiceException("There must be 2 different users");
         }
 
-        AtomicReference<Optional<Friendship>> deletedFriendship = new AtomicReference<>(Optional.empty());
+        //AtomicReference<Optional<Friendship>> deletedFriendship = new AtomicReference<>(Optional.empty());
+        Optional<Friendship> deletedFriendship = Optional.empty();
 
-//        for(Friendship friendship : friendshipRepository.findAll()) {
-//            if(friendship.getUser1().getId().equals(user1.getId()) && friendship.getUser2().getId().equals(user2.getId())) { // testing to see if the users have the same id as the entities from the friendship
-//                deletedFriendship = friendshipRepository.delete(friendship.getId());
-//                break;
-//            }
-//        }
-
-        friendshipRepository.findAll().forEach(friendship -> {
-            if (friendship.getUser1().getId().equals(user1.getId()) && friendship.getUser2().getId().equals(user2.getId())) {
-                try {
-                    deletedFriendship.set(friendshipRepository.delete(friendship.getId()));
-                } catch (RepositoryException e) {
-                    throw new RuntimeException(e);
-                }
+        for(Friendship friendship : friendshipRepository.findAll()) {
+            if(friendship.getUser1().getId().equals(user2.getId()) && friendship.getUser2().getId().equals(user1.getId())) { // testing to see if the users have the same id as the entities from the friendship
+                deletedFriendship = friendshipRepository.delete(friendship.getId());
+                break;
             }
-        });
-
-        if(deletedFriendship.get().isEmpty()) {
-            throw new ServiceException("You are not friends with this user");
         }
+
+//        friendshipRepository.findAll().forEach(friendship -> {
+//            if (friendship.getUser1().getId().equals(user1.getId()) && friendship.getUser2().getId().equals(user2.getId())) {
+//                try {
+//                    deletedFriendship.set(friendshipRepository.delete(friendship.getId()));
+//                } catch (RepositoryException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        });
+
+//        if(deletedFriendship.isPresent()) {
+//            throw new ServiceException("You are not friends with this user");
+//        }
 
         user1.removeFriend(user2);
         user2.removeFriend(user1);

@@ -47,7 +47,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
                 </Button>
-                <Button alignment="CENTER" layoutX="65.0" layoutY="10.0" maxHeight="28.0" maxWidth="23.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="0.0" styleClass="windows-buttons" stylesheets="@../../../Stylesheets/styles.css">
+                <Button fx:id="logoutButton" onAction="#onLogOutButtonClick" alignment="CENTER" layoutX="65.0" layoutY="10.0" maxHeight="28.0" maxWidth="23.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="0.0" styleClass="windows-buttons" stylesheets="@../../../Stylesheets/styles.css">
                     <graphic>
                         <ImageView fitHeight="49.0" fitWidth="54.0" nodeOrientation="INHERIT" styleClass="icons">
                             <cursor>
@@ -70,7 +70,7 @@
       <HBox alignment="CENTER" layoutX="571.0" layoutY="394.0" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
          <children>
             <Button fx:id="addButton" mnemonicParsing="false" onAction="#onAddButtonClick" styleClass="buttons" text="Add" textAlignment="CENTER" />
-            <Button mnemonicParsing="false" styleClass="buttons" text="Remove" />
+            <Button fx:id="removeButton" onAction="#onRemoveButtonClick" mnemonicParsing="false" styleClass="buttons" text="Remove" />
          </children>
       </HBox>
     </children>

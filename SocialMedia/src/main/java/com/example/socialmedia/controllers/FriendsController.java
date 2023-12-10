@@ -15,12 +15,16 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -40,9 +44,13 @@ public class FriendsController {
     public Button addButton;
 
     private final ListView<User> listView = new ListView<>();
+    @FXML
+    public Button logoutButton;
+    @FXML
+    public Button removeButton;
 
     @FXML
-    private ListView<Friendship> friendshipListView;
+    private ListView<String> friendshipListView;
     @FXML
     private ListView<Pair<String, String>> friendRequestsListView;
 
@@ -68,15 +76,24 @@ public class FriendsController {
         this.user = user;
 
         // finding all friends of the user
-        user.getFriends().forEach(friend -> friends.add(friend.getFirstName() + " " + friend.getLastName() + " " + friend.getEmail()));
+        service.findAllFriendships().forEach(friendship -> {
+            if(friendship.getRequstState().toString().equals("APPROVED")) {
+                if (friendship.getUser1().getId().equals(user.getId())) {
+                    User friend = friendship.getUser2();
+                    friends.add(friend.getFirstName() + " " + friend.getLastName() + " " + friend.getEmail());
+                } else if(friendship.getUser2().getId().equals(user.getId())) {
+                    User friend = friendship.getUser1();
+                    friends.add(friend.getFirstName() + " " + friend.getLastName() + " " +friend.getEmail());
+                }
+            }
+        });
 
         // finding all the friend requests for the user that logged in
         service.findAllFriendships().forEach(friendship -> {
-            if(friendship.getUser2().getId().equals(user.getId())) {
-                if(Objects.equals(friendship.getRequstState().toString(), "PENDING")) {
+            if(friendship.getUser2().getId().equals(user.getId()) && (Objects.equals(friendship.getRequstState().toString(), "PENDING"))) {
                     User friend = friendship.getUser1();
                     friendsRequests.add(new Pair<>(friend.getFirstName() + " " + friend.getLastName(), friend.getEmail()));
-                }
+
             }
         });
 
@@ -105,12 +122,12 @@ public class FriendsController {
     }
 
     public void initializeFriendRequestsTable() {
-        friendRequestsListView.getItems().removeAll();
+        friendRequestsListView.getItems().removeAll(friendsRequests);
         friendRequestsListView.getItems().addAll(friendsRequests);
 
-        friendRequestsListView.setCellFactory(param -> new ListCell<Pair<String, String>>() {
-            private Button acceptRequest = new Button("Accept");
-            private Button declineRequest = new Button("Decline");
+        friendRequestsListView.setCellFactory(param -> new ListCell<>() {
+            private final Button acceptRequest = new Button("Accept");
+            private final Button declineRequest = new Button("Decline");
             @Override
             protected void updateItem(Pair<String, String> item, boolean empty) {
                 super.updateItem(item, empty);
@@ -120,42 +137,63 @@ public class FriendsController {
                     setGraphic(null);
                 } else {
                     setText(item.getKey());
-                    setGraphic(new HBox(acceptRequest, declineRequest));
+                    ImageView imageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/user.png"))));
+                    imageView.setFitHeight(25);
+                    imageView.setFitWidth(25);
+                    setGraphic(new HBox(acceptRequest, declineRequest, imageView));
 
                     acceptRequest.setOnAction(event -> {
                         try {
-                            // TODO: nu dispare requestul si nu se salveaza prietenia cu noul request state
                             service.acceptFriendship(user.getEmail(), item.getValue());
-                            // Optionally, you can update the UI or remove the item from the list
+
                             friendsRequests.remove(item);
-                            initializeFriendRequestsTable();
+                            friends.add(item.getKey());
+
+                            setText(null);
+                            setGraphic(null);
+                            initializeFriendsTable();
                         } catch (ServiceException e) {
-                            System.out.println("Error at accepting request");
+                            System.out.println(e.getMessage());
                         }
                     });
 
                     declineRequest.setOnAction(event -> {
-                        // Implement logic for declining the friendship if needed
+                        try {
+                            service.declineFriendship(user.getEmail(), item.getValue());
+
+                            friendsRequests.remove(item);
+
+                            setText(null);
+                            setGraphic(null);
+                        } catch (ServiceException e) {
+                            System.out.println(e.getMessage());
+                        }
                     });
                 }
             }
         });
     }
 
-    public void initializeFriendsTable() throws ServiceException, RepositoryException {
-        Collection<Friendship> friendshipCollection = (Collection<Friendship>) service.findAllFriendships();
+    public void initializeFriendsTable() {
 
-        List<Friendship> friendshipsList = new ArrayList<>(friendshipCollection);
-
-        friendshipListView.getItems().addAll(friendshipsList.stream().filter(friendship -> friendship.getRequstState().toString().equals("APPROVED")).toList());
+        friendshipListView.getItems().removeAll(friends);
+        friendshipListView.getItems().addAll(friends);
         friendshipListView.setCellFactory(param -> new ListCell<>() {
             @Override
-            protected void updateItem(Friendship friendship, boolean empty) {
-                super.updateItem(friendship, empty);
-                if (empty || friendship == null) {
+            protected void updateItem(String friend, boolean empty) {
+                super.updateItem(friend, empty);
+                if (empty || friend == null) {
                     setText(null);
+                    setGraphic(null);
                 } else {
-                    setText(friendship.getUser1().getFirstName() + " " + friendship.getUser1().getLastName());
+                    String[] name = friend.split(" ");
+                    Text email = new Text(name[2]);
+                    email.setStyle("-fx-opacity: 0;");
+                    setText(name[0] + " " + name[1] + " " + email);
+                    ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("/Images/user.png")));
+                    imageView.setFitHeight(25);
+                    imageView.setFitWidth(25);
+                    setGraphic(imageView);
                 }
             }
         });
@@ -177,8 +215,13 @@ public class FriendsController {
                 super.updateItem(user, empty);
                 if (empty || user == null) {
                     setText(null);
+                    setGraphic(null);
                 } else {
                     setText(user.getFirstName() + " " + user.getLastName() + " " + user.getEmail()); // Set the appropriate user property
+                    ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("/Images/user.png")));
+                    imageView.setFitHeight(25);
+                    imageView.setFitWidth(25);
+                    setGraphic(imageView);
                 }
             }
         });
@@ -231,5 +274,51 @@ public class FriendsController {
         stage.setScene(scene);
 
         stage.show();
+    }
+
+    @FXML
+    public void onLogOutButtonClick(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/com/example/socialmedia/login.fxml"));
+            Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+
+            AnchorPane layout = loader.load();
+            Scene scene = new Scene(layout);
+            stage.setScene(scene);
+
+            LoginController controller = loader.getController();
+            controller.setService(service);
+
+            stage.show();
+        } catch (Exception ignored) {
+            // let the app do nothing if it cant go back to log in
+        }
+    }
+
+    @FXML
+    public void onRemoveButtonClick() {
+        try {
+            // getting the email of the user
+            String selection = friendshipListView.getSelectionModel().getSelectedItem();
+            String[] selectionSplit = selection.split(" ");
+            String email = selectionSplit[selectionSplit.length - 1];
+
+            // deleting the friendship with the selected friend
+            service.deleteFriendship(service.getUserByEmail(email), service.getUserByEmail(this.user.getEmail()));
+
+            friends.remove(selectionSplit[0] + " " + selectionSplit[1]);
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Friendship Update");
+            alert.setHeaderText(null);
+            alert.setContentText("You are no longer friends with this user.");
+
+            alert.showAndWait();
+
+            initializeFriendsTable();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

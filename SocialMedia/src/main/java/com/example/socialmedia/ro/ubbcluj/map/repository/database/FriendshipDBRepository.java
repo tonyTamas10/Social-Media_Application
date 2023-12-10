@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -42,7 +43,7 @@ public class FriendshipDBRepository extends AbstractDBRepository<Tuple<UUID, UUI
         Optional<Friendship> friendship = Optional.empty();
 
         try (Connection connection = databaseManager.getConnection(); // estabilishing a connection with the database
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM friendships' " + "WHERE user1_id = " + " '" + ids.getLeft().toString() + "'" + " AND user2_id = " + "'" + ids.getRight().toString() + "'" + ";"); // preparing a query to be executed
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM friendships " + "WHERE user1_id = " + " '" + ids.getLeft().toString() + "'" + " AND user2_id = " + "'" + ids.getRight().toString() + "'" + ";"); // preparing a query to be executed
              ResultSet resultSet = statement.executeQuery() // execute the query
         ){
 
@@ -50,7 +51,8 @@ public class FriendshipDBRepository extends AbstractDBRepository<Tuple<UUID, UUI
 
                 UUID id1 = UUID.fromString(resultSet.getString("user1_id"));
                 UUID id2 = UUID.fromString(resultSet.getString("user2_id"));
-                LocalDateTime date = LocalDateTime.parse(resultSet.getString("friendsFrom"));
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
+                LocalDateTime date = LocalDateTime.parse(resultSet.getString("friendsFrom"), formatter);
 
                 var entity = new Entity<Tuple<UUID, UUID>>();
                 entity.setId(new Tuple<>(id1, id2));
@@ -76,9 +78,9 @@ public class FriendshipDBRepository extends AbstractDBRepository<Tuple<UUID, UUI
 
                 UUID id1 = UUID.fromString(resultSet.getString("user1_id"));
                 UUID id2 = UUID.fromString(resultSet.getString("user2_id"));
-                String requestState = resultSet.getString("request_state");
                 //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 Timestamp timestamp = resultSet.getTimestamp("friendsfrom");
+                String requestState = resultSet.getString("request_state");
                 LocalDateTime date = timestamp.toLocalDateTime();
 
                 Optional<User> user1 = repo.findOne(id1);
@@ -90,13 +92,25 @@ public class FriendshipDBRepository extends AbstractDBRepository<Tuple<UUID, UUI
                 friendship.setRequstState(FriendshipRequest.valueOf(requestState));
 
                 Friendship finalFriendship = friendship;
-                user1.ifPresent(user -> user.addFriend(finalFriendship.getUser2()));
-                user2.ifPresent(user -> user.addFriend(finalFriendship.getUser1()));
+                user1.ifPresent(user -> {
+                    user.addFriend(finalFriendship.getUser2());
+                    try {
+                        repo.save(user);
+                    } catch (RepositoryException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                user2.ifPresent(user -> {
+                    user.addFriend(finalFriendship.getUser1());
+                    try {
+                        repo.save(user);
+                    } catch (RepositoryException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
 
                 friendships.add(friendship);
             }
-            
-            return friendships;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -109,7 +123,7 @@ public class FriendshipDBRepository extends AbstractDBRepository<Tuple<UUID, UUI
         Optional<Friendship> friendship = super.save(entity);
 
         try (Connection connection = databaseManager.getConnection();
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO friendships VALUES ( " + "'" + entity.getUser1().getId().toString() + "'" + ", " + "'" +entity.getUser2().getId().toString() + "'" + ", '" + Timestamp.valueOf(entity.getDate()) + "');")
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO friendships VALUES ( " + "'" + entity.getUser1().getId().toString() + "'" + ", '" + entity.getUser2().getId().toString() + "'" + ", '" + Timestamp.valueOf(entity.getDate()) + "'" + ", '" + entity.getRequstState() + "');")
         ){
             int rowsAffected = statement.executeUpdate();
             
@@ -130,8 +144,9 @@ public class FriendshipDBRepository extends AbstractDBRepository<Tuple<UUID, UUI
         Optional<Friendship> entity = super.delete(id);
         if(entity.isPresent()) {
             try (Connection connection = databaseManager.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("DELETE from friendships where user1_id = '" + id.getLeft().toString() + "' AND user2_id = '" + id.getRight().toString() + "';");
-                 ResultSet resultSet = statement.executeQuery()) {
+                 PreparedStatement statement = connection.prepareStatement("DELETE from friendships where user1_id = '" + id.getLeft().toString() + "' AND user2_id = '" + id.getRight().toString() + "';"))
+                 {
+                     int rowsAffectet = statement.executeUpdate();
 
             } catch (Exception e) {
                 throw new RepositoryException(e.toString());

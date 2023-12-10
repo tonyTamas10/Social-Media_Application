@@ -1,3 +1,8 @@
 
-h	java:S112ƒ"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8²õÔğÄ1
-k	java:S100ö"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ò¨¾ò8ÏõÔğÄ1
+g
+java:S1854v"ERemove this useless assignment to local variable "deletedFriendship".(€šî™üÿÿÿÿ8º»ıœÅ1
+g
+java:S1854z"ERemove this useless assignment to local variable "deletedFriendship".(¡ëÆ®şÿÿÿÿ8º»ıœÅ1
+X
+java:S1481v"6Remove this unused "deletedFriendship" local variable.(€šî™üÿÿÿÿ8º»ıœÅ1
+k	java:S100÷"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ò¨¾ò8ò€•›Å1

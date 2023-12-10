@@ -30,7 +30,7 @@ public class InMemoryRepository<ID, E extends Entity<ID>> implements Repository<
     }
 
     @Override
-    public Iterable<E> findAll() throws RepositoryException {
+    public Iterable<E> findAll() {
         return entities.values();
     }
 
