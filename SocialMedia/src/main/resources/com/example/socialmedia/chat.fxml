@@ -3,35 +3,48 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialmedia.controllers.ChatController">
-
-    <!-- VBox for the chat window -->
-    <VBox layoutX="10.0" layoutY="10.0" prefHeight="380.0" prefWidth="580.0">
-
-        <!-- ListView to display messages -->
-        <ListView fx:id="messageListView" prefHeight="300.0" prefWidth="580.0" />
-
-        <!-- HBox for message input and send button -->
-        <HBox alignment="CENTER" prefHeight="80.0" prefWidth="580.0" spacing="10.0">
-
-            <!-- Text field for entering messages -->
-            <TextField fx:id="messageField" prefHeight="60.0" prefWidth="460.0" promptText="Enter a message..." stylesheets="@../../../Stylesheets/styles.css" />
-
-            <!-- Button to send messages -->
-            <Button fx:id="sendButton" onAction="#sendMessage" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" styleClass="buttons" stylesheets="@../../../Stylesheets/styles.css" text="Send" />
-
-        </HBox>
-    </VBox>
-
-    <!-- ImageView for user pictures -->
-    <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="540.0" layoutY="330.0">
-        <Image url="@/Images/user.png" />
-    </ImageView>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../../../Stylesheets/styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialmedia.controllers.ChatController">
+   <GridPane alignment="CENTER" styleClass="grid-pane">
+     <columnConstraints>
+       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+     </columnConstraints>
+     <rowConstraints>
+         <RowConstraints maxHeight="295.5692443847656" minHeight="10.0" prefHeight="48.5551643371582" vgrow="SOMETIMES" />
+       <RowConstraints maxHeight="551.4448356628418" minHeight="10.0" prefHeight="551.4448356628418" vgrow="SOMETIMES" />
+     </rowConstraints>
+      <children>
+      
+                <!-- VBox for the chat window -->
+          <VBox alignment="CENTER" prefHeight="280.0" prefWidth="440.0" GridPane.rowIndex="1">
+      
+                    <!-- ListView to display messages -->
+              <ListView fx:id="messageListView" prefHeight="503.0" prefWidth="980.0" />
+      
+                    <!-- HBox for message input and send button -->
+              <HBox alignment="CENTER" prefHeight="80.0" prefWidth="580.0" spacing="10.0">
+      
+                        <!-- Text field for entering messages -->
+                  <TextField fx:id="messageField" prefHeight="60.0" prefWidth="460.0" promptText="Enter a message..." stylesheets="@../../../Stylesheets/styles.css">
+                  <font>
+                     <Font size="16.0" />
+                  </font>
+               </TextField>
+      
+                        <!-- Button to send messages -->
+                  <Button fx:id="sendButton" mnemonicParsing="false" onAction="#sendMessage" prefHeight="60.0" prefWidth="100.0" styleClass="buttons" stylesheets="@../../../Stylesheets/styles.css" text="Send" />
+      
+                    </HBox>
+          </VBox>
+         <Button fx:id="backButton" mnemonicParsing="false" onAction="#onBackButtonClick" styleClass="buttons" text="Back" textAlignment="CENTER" />
+      </children>
+   </GridPane>
 
 </AnchorPane>

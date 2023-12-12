@@ -4,7 +4,9 @@ import com.example.socialmedia.ro.ubbcluj.map.config.DatabaseManager;
 import com.example.socialmedia.ro.ubbcluj.map.domain.Message;
 import com.example.socialmedia.ro.ubbcluj.map.domain.User;
 import com.example.socialmedia.ro.ubbcluj.map.repository.Repository;
+import com.example.socialmedia.ro.ubbcluj.map.repository.RepositoryException;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Optional;
@@ -42,7 +44,8 @@ public class MessageDBRepository extends AbstractDBRepository<UUID, Message>{
                 UUID senderId = UUID.fromString(resultSet.getString("sender_id"));
                 UUID receiverId = UUID.fromString(resultSet.getString("receiver_id"));
                 String text = resultSet.getString("message_content");
-                LocalDateTime date = LocalDateTime.parse(resultSet.getString("message_from"));
+                Timestamp timestamp = resultSet.getTimestamp("message_from");
+                LocalDateTime date = timestamp.toLocalDateTime();
                 messages.add(new Message(id, senderId, receiverId, text, date));
             }
         } catch (Exception e) {
@@ -52,19 +55,23 @@ public class MessageDBRepository extends AbstractDBRepository<UUID, Message>{
     }
     
     @Override
-    public Optional<Message> save(Message entity) {
-        try (var connection = databaseManager.getConnection();
-             var statement = connection.prepareStatement("INSERT INTO messages(message_id, sender_id, receiver_id, message_content, message_from) VALUES (?, ?, ?, ?, ?)");
-        ) {
-            statement.setString(1, entity.getId().toString());
-            statement.setString(2, entity.getSenderID().toString());
-            statement.setString(3, entity.getReceiverID().toString());
-            statement.setString(4, entity.getText());
-            statement.setTimestamp(5, entity.getTimeSent());
-            statement.executeUpdate();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+    public Optional<Message> save(Message entity) throws RepositoryException {
+        Optional<Message> message = super.save(entity);
+
+        if(message.isEmpty()) {
+            try (var connection = databaseManager.getConnection();
+                 var statement = connection.prepareStatement("INSERT INTO messages(message_id, sender_id, receiver_id, message_content, message_from) VALUES (?, ?, ?, ?, ?)");
+            ) {
+                statement.setString(1, entity.getId().toString());
+                statement.setString(2, entity.getSenderID().toString());
+                statement.setString(3, entity.getReceiverID().toString());
+                statement.setString(4, entity.getText());
+                statement.setTimestamp(5, entity.getTimeSent());
+                statement.executeUpdate();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
         }
-        return Optional.empty();
+        return message;
     }
 }

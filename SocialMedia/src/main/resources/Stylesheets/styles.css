@@ -33,6 +33,14 @@
     -fx-background-image: url('/Images/background.png');
 }
 
+.grid-pane {
+    -fx-alignment: center;
+    -fx-min-width: 1000px;
+    -fx-min-height: 600px;
+    -fx-pref-width: 100%; /* Set preferred width to occupy available width */
+    -fx-pref-height: 100%; /* Set preferred height to occupy available height */
+}
+
 .image-with-fading-shadow {
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 0) innershadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 0);
 }

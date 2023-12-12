@@ -290,6 +290,7 @@ public class FriendsController {
 
             LoginController controller = loader.getController();
             controller.setService(service);
+            controller.setMessageService(messageService);
 
             stage.show();
         } catch (Exception ignored) {
