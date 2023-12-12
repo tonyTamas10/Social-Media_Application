@@ -24,7 +24,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -48,6 +47,8 @@ public class FriendsController {
     public Button logoutButton;
     @FXML
     public Button removeButton;
+    @FXML
+    public Button openChatButton;
 
     @FXML
     private ListView<String> friendshipListView;
@@ -70,6 +71,10 @@ public class FriendsController {
 
     public void setService(ServiceComponent service) {
         this.service = service;
+    }
+
+    public void setMessageService(MessageService messageService) {
+        this.messageService = messageService;
     }
 
     public void initApp(User user) throws ServiceException, RepositoryException {
@@ -122,8 +127,8 @@ public class FriendsController {
     }
 
     public void initializeFriendRequestsTable() {
-        friendRequestsListView.getItems().removeAll(friendsRequests);
-        friendRequestsListView.getItems().addAll(friendsRequests);
+
+        friendRequestsListView.getItems().setAll(friendsRequests);
 
         friendRequestsListView.setCellFactory(param -> new ListCell<>() {
             private final Button acceptRequest = new Button("Accept");
@@ -147,7 +152,7 @@ public class FriendsController {
                             service.acceptFriendship(user.getEmail(), item.getValue());
 
                             friendsRequests.remove(item);
-                            friends.add(item.getKey());
+                            friends.add(item.getKey() + " " + item.getValue());
 
                             setText(null);
                             setGraphic(null);
@@ -176,8 +181,7 @@ public class FriendsController {
 
     public void initializeFriendsTable() {
 
-        friendshipListView.getItems().removeAll(friends);
-        friendshipListView.getItems().addAll(friends);
+        friendshipListView.getItems().setAll(friends);
         friendshipListView.setCellFactory(param -> new ListCell<>() {
             @Override
             protected void updateItem(String friend, boolean empty) {
@@ -186,10 +190,7 @@ public class FriendsController {
                     setText(null);
                     setGraphic(null);
                 } else {
-                    String[] name = friend.split(" ");
-                    Text email = new Text(name[2]);
-                    email.setStyle("-fx-opacity: 0;");
-                    setText(name[0] + " " + name[1] + " " + email);
+                    setText(friend);
                     ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("/Images/user.png")));
                     imageView.setFitHeight(25);
                     imageView.setFitWidth(25);
@@ -305,9 +306,10 @@ public class FriendsController {
             String email = selectionSplit[selectionSplit.length - 1];
 
             // deleting the friendship with the selected friend
-            service.deleteFriendship(service.getUserByEmail(email), service.getUserByEmail(this.user.getEmail()));
+            service.deleteFriendship(service.getUserByEmail(this.user.getEmail()), service.getUserByEmail(email));
 
-            friends.remove(selectionSplit[0] + " " + selectionSplit[1]);
+            friends.remove(selection);
+            initializeFriendsTable();
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Friendship Update");
@@ -315,10 +317,32 @@ public class FriendsController {
             alert.setContentText("You are no longer friends with this user.");
 
             alert.showAndWait();
-
-            initializeFriendsTable();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    @FXML
+    public void onOpenChatButtonClick(ActionEvent event) throws IOException, RepositoryException {
+        // getting the friend that was selected
+        String selectedFriend = friendshipListView.getSelectionModel().getSelectedItem();
+        String[] selectedFriendSplit = selectedFriend.split(" ");
+        String email = selectedFriendSplit[selectedFriendSplit.length - 1];
+        User friend = service.getUserByEmail(email);
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/com/example/socialmedia/chat.fxml"));
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+
+        AnchorPane layout = loader.load();
+        Scene scene = new Scene(layout);
+        stage.setScene(scene);
+
+        ChatController controller = loader.getController();
+        controller.setService(service);
+        controller.setMessageService(messageService);
+        controller.initApp(user, friend);
+
+        stage.show();
     }
 }

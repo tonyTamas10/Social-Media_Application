@@ -1,8 +1,2 @@
 
-g
-java:S1854v"ERemove this useless assignment to local variable "deletedFriendship".(€šî™üÿÿÿÿ8º»ýœÅ1
-g
-java:S1854z"ERemove this useless assignment to local variable "deletedFriendship".(¡ëÆ®þÿÿÿÿ8º»ýœÅ1
-X
-java:S1481v"6Remove this unused "deletedFriendship" local variable.(€šî™üÿÿÿÿ8º»ýœÅ1
-k	java:S100÷"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ò¨¾ò8ò€•›Å1
+k	java:S100ô"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ò¨¾ò8ò€•›Å1

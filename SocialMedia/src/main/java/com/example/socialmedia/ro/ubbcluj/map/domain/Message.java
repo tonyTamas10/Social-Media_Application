@@ -1,20 +1,23 @@
 package com.example.socialmedia.ro.ubbcluj.map.domain;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Message extends Entity<UUID> {
 
+    private UUID messageID;
     private String text;
-    private User sender;
-    private User receiver;
-    private LocalDateTime timeSent;
+    private UUID senderID;
+    private UUID receiverID;
+    private Timestamp timeSent;
 
-    public Message(String text, User sender, User receiver) {
+    public Message(UUID messageID, UUID senderID, UUID receiverID, String text, LocalDateTime timeSent) {
+        this.messageID = messageID;
         this.text = text;
-        this.sender = sender;
-        this.receiver = receiver;
-        this.timeSent = LocalDateTime.now();
+        this.senderID = senderID;
+        this.receiverID = receiverID;
+        this.timeSent = Timestamp.valueOf(LocalDateTime.now());
         this.setId(UUID.randomUUID());
     }
 
@@ -26,27 +29,35 @@ public class Message extends Entity<UUID> {
         this.text = text;
     }
 
-    public User getSender() {
-        return sender;
+    public UUID getMessageID() {
+        return messageID;
     }
 
-    public void setSender(User sender) {
-        this.sender = sender;
+    public void setMessageID(UUID messageID) {
+        this.messageID = messageID;
     }
 
-    public User getReceiver() {
-        return receiver;
+    public UUID getSenderID() {
+        return senderID;
     }
 
-    public void setReceiver(User receiver) {
-        this.receiver = receiver;
+    public void setSenderID(UUID senderID) {
+        this.senderID = senderID;
     }
 
-    public LocalDateTime getTimeSent() {
+    public UUID getReceiverID() {
+        return receiverID;
+    }
+
+    public void setReceiverID(UUID receiverID) {
+        this.receiverID = receiverID;
+    }
+
+    public Timestamp getTimeSent() {
         return timeSent;
     }
 
     public void setTimeSent(LocalDateTime timeSent) {
-        this.timeSent = timeSent;
+        this.timeSent = Timestamp.valueOf(timeSent);
     }
 }

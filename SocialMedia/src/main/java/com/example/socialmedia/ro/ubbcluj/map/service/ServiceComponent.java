@@ -114,12 +114,9 @@ public class ServiceComponent implements Service<UUID, User> {
             throw new ServiceException("There must be 2 different users");
         }
 
-        //AtomicReference<Optional<Friendship>> deletedFriendship = new AtomicReference<>(Optional.empty());
-        Optional<Friendship> deletedFriendship = Optional.empty();
-
         for(Friendship friendship : friendshipRepository.findAll()) {
-            if(friendship.getUser1().getId().equals(user2.getId()) && friendship.getUser2().getId().equals(user1.getId())) { // testing to see if the users have the same id as the entities from the friendship
-                deletedFriendship = friendshipRepository.delete(friendship.getId());
+            if(friendship.getUser1().getId().equals(user1.getId()) || friendship.getUser1().getId().equals(user2.getId())) { // testing to see if the users have the same id as the entities from the friendship
+                friendshipRepository.delete(friendship.getId());
                 break;
             }
         }

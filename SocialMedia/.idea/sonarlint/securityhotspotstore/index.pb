@@ -78,3 +78,7 @@ Psrc/main/java/com/example/socialmedia/ro/ubbcluj/map/service/MessageService.jav
 Ysrc/main/java/com/example/socialmedia/ro/ubbcluj/map/service/MessageServiceComponent.java,e/9/e9739bfa27dca0eef5978b29f56112f35ae01229
 v
 Fsrc/main/java/com/example/socialmedia/controllers/LoginController.java,6/c/6c8a55d399b0ec532ce594af84deac598abe4138
+‘
+asrc/main/java/com/example/socialmedia/ro/ubbcluj/map/repository/database/MessageDBRepository.java,e/1/e1a7b026cb69838dea5387e4c7e7e17803ac446f
+u
+Esrc/main/java/com/example/socialmedia/controllers/ChatController.java,7/6/7678e002ee8917506ba1f7902ac31b6737d359fc

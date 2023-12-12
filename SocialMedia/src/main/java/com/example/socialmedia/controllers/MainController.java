@@ -1,6 +1,7 @@
 // MainController.java
 package com.example.socialmedia.controllers;
 
+import com.example.socialmedia.ro.ubbcluj.map.service.MessageService;
 import com.example.socialmedia.ro.ubbcluj.map.service.ServiceComponent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,9 +25,14 @@ public class MainController implements Initializable {
 
     @FXML
     private Button addUserButton;
+    private MessageService messageService;
 
     public void setService(ServiceComponent service) {
         this.service = service;
+    }
+
+    public void setMessageService(MessageService messageService) {
+        this.messageService = messageService;
     }
 
     @Override
@@ -46,9 +52,9 @@ public class MainController implements Initializable {
 
         LoginController controller = loader.getController();
         controller.setService(service);
+        controller.setMessageService(messageService);
 
         stage.show();
     }
-
 }
 

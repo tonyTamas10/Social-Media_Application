@@ -5,12 +5,16 @@ import com.example.socialmedia.controllers.MainController;
 import com.example.socialmedia.ro.ubbcluj.map.config.DatabaseConfig;
 import com.example.socialmedia.ro.ubbcluj.map.config.DatabaseManager;
 import com.example.socialmedia.ro.ubbcluj.map.domain.Friendship;
+import com.example.socialmedia.ro.ubbcluj.map.domain.Message;
 import com.example.socialmedia.ro.ubbcluj.map.domain.Tuple;
 import com.example.socialmedia.ro.ubbcluj.map.domain.User;
 import com.example.socialmedia.ro.ubbcluj.map.domain.validators.UserValidator;
 import com.example.socialmedia.ro.ubbcluj.map.repository.Repository;
 import com.example.socialmedia.ro.ubbcluj.map.repository.database.FriendshipDBRepository;
+import com.example.socialmedia.ro.ubbcluj.map.repository.database.MessageDBRepository;
 import com.example.socialmedia.ro.ubbcluj.map.repository.database.UserDBRepository;
+import com.example.socialmedia.ro.ubbcluj.map.service.MessageService;
+import com.example.socialmedia.ro.ubbcluj.map.service.MessageServiceComponent;
 import com.example.socialmedia.ro.ubbcluj.map.service.ServiceComponent;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -24,6 +28,7 @@ import java.util.UUID;
 public class MainApp extends Application {
 
     private ServiceComponent service;
+    private MessageService messageService;
 
     public static void main(String[] args) {
         launch(args);
@@ -34,8 +39,10 @@ public class MainApp extends Application {
         DatabaseManager databaseManager = new DatabaseManager(DatabaseConfig.DB_URL, DatabaseConfig.DB_USER, DatabaseConfig.DB_PASS);
         Repository<UUID, User> userRepository = new UserDBRepository(databaseManager);
         Repository<Tuple<UUID, UUID>, Friendship> friendshipRepository = new FriendshipDBRepository(databaseManager, userRepository);
+        Repository<UUID, Message> messageRepository = new MessageDBRepository(databaseManager, userRepository);
         UserValidator userValidator = new UserValidator();
         service = new ServiceComponent(userValidator, userRepository, friendshipRepository);
+        messageService = new MessageServiceComponent(messageRepository);
 
         initView(stage);
         stage.setResizable(true);
@@ -51,5 +58,6 @@ public class MainApp extends Application {
 
         MainController controller = loader.getController();
         controller.setService(this.service);
+        controller.setMessageService(this.messageService);
     }
 }
