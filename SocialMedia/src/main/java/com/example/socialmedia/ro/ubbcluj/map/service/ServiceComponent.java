@@ -5,6 +5,11 @@ import com.example.socialmedia.ro.ubbcluj.map.domain.validators.UserValidator;
 import com.example.socialmedia.ro.ubbcluj.map.repository.Repository;
 import com.example.socialmedia.ro.ubbcluj.map.repository.RepositoryException;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -16,6 +21,45 @@ public class ServiceComponent implements Service<UUID, User> {
     private final UserValidator validator;
     private final Repository<UUID, User> userRepository;
     private final Repository<Tuple<UUID, UUID>, Friendship> friendshipRepository;
+    private SecretKeySpec secretKey;
+    private static final String ALGORITHM = "AES";
+
+    public void prepareSecretKey(String myKey) {
+        MessageDigest sha;
+        try {
+            byte[] key = myKey.getBytes(StandardCharsets.UTF_8);
+            sha = MessageDigest.getInstance("SHA-1");
+            key = sha.digest(key);
+            key = Arrays.copyOf(key, 16);
+            secretKey = new SecretKeySpec(key, ALGORITHM);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String encrypt(String password){
+        try {
+            prepareSecretKey("secret");
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            return Base64.getEncoder().encodeToString(cipher.doFinal(password.getBytes(StandardCharsets.UTF_8)));
+        } catch (Exception e) {
+            System.out.println("Error while encrypting: " + e);
+        }
+        return null;
+    }
+
+    private String decrypt(String password){
+        try {
+            prepareSecretKey("secret");
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            cipher.init(Cipher.DECRYPT_MODE, secretKey);
+            return new String(cipher.doFinal(Base64.getDecoder().decode(password)));
+        } catch (Exception e) {
+            System.out.println("Error while decrypting: " + e);
+        }
+        return null;
+    }
 
     public ServiceComponent(UserValidator validator, Repository<UUID, User> userRepository, Repository<Tuple<UUID, UUID>, Friendship> friendshipRepository) {
         this.validator = validator;
@@ -48,8 +92,15 @@ public class ServiceComponent implements Service<UUID, User> {
     public User getUserByEmail(String email) throws RepositoryException {
         Iterable<User> users = userRepository.findAll();
         for(User user : users) {
-            if(email.equals(user.getEmail()))
+            if(email.equals(user.getEmail())) {
+                // decrypting the password
+                if(user.getPassword().length() > 20) {
+                    String decryptedPassword = decrypt(user.getPassword());
+                    user.setPassword(decryptedPassword);
+                }
+
                 return user;
+            }
         }
         return null;
     }
@@ -59,6 +110,8 @@ public class ServiceComponent implements Service<UUID, User> {
         if(getUserByEmail(entity.getEmail()) != null) {
             throw new ServiceException("An user with the email << " + entity.getEmail() + " >> already exists");
         }
+        // encrypting the password before saving it
+        entity.setPassword(encrypt(entity.getPassword()));
 
         if(userRepository.save(entity).isPresent()) {
             throw new ServiceException("The entity already exists");

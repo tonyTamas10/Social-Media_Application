@@ -1,9 +1,10 @@
 package com.example.socialmedia.controllers;
 
 import com.example.socialmedia.ro.ubbcluj.map.domain.Message;
+import com.example.socialmedia.ro.ubbcluj.map.domain.MessageObserver;
 import com.example.socialmedia.ro.ubbcluj.map.domain.User;
 import com.example.socialmedia.ro.ubbcluj.map.repository.RepositoryException;
-import com.example.socialmedia.ro.ubbcluj.map.service.MessageService;
+import com.example.socialmedia.ro.ubbcluj.map.service.MessageServiceComponent;
 import com.example.socialmedia.ro.ubbcluj.map.service.ServiceComponent;
 import com.example.socialmedia.ro.ubbcluj.map.service.ServiceException;
 import javafx.collections.FXCollections;
@@ -27,7 +28,7 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
 
-public class ChatController {
+public class ChatController implements MessageObserver {
     @FXML
     public TextArea messageArea;
     @FXML
@@ -39,7 +40,7 @@ public class ChatController {
     @FXML
     public Button backButton;
     private ServiceComponent service;
-    private MessageService messageService;
+    private MessageServiceComponent messageService;
     private User user;
     private User friend;
     private final ObservableList<Message> messages = FXCollections.observableArrayList();
@@ -48,22 +49,30 @@ public class ChatController {
         this.service = service;
     }
 
-    public void setMessageService(MessageService messageService) {
+    public void setMessageService(MessageServiceComponent messageService) {
         this.messageService = messageService;
     }
 
     public void initApp(User user, User friend) {
         this.user = user;
         this.friend = friend;
+
+        if(!messageService.hasObserver(this)) {
+            messageService.addObserver(this);
+        }
+
         try {
             Collection<Message> allMessages = (Collection<Message>) messageService.getAll();
+
             messages.setAll(allMessages);
+
             initializeMessageList();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     public void initializeMessageList() {
         messageListView.setItems(messages);
@@ -140,5 +149,13 @@ public class ChatController {
         controller.initializeFriendsTable(); // calling method from here to have the service initialized
 
         stage.show();
+    }
+
+    @Override
+    public void update(Message message) {
+        if (message.getSenderID().equals(friend.getId())) {
+            messages.add(message);
+            initializeMessageList();
+        }
     }
 }

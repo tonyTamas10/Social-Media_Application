@@ -1,7 +1,7 @@
 package com.example.socialmedia.controllers;
 
 import com.example.socialmedia.ro.ubbcluj.map.domain.User;
-import com.example.socialmedia.ro.ubbcluj.map.service.MessageService;
+import com.example.socialmedia.ro.ubbcluj.map.service.MessageServiceComponent;
 import com.example.socialmedia.ro.ubbcluj.map.service.ServiceComponent;
 import com.example.socialmedia.ro.ubbcluj.map.service.ServiceException;
 import javafx.event.ActionEvent;
@@ -24,13 +24,13 @@ public class LoginController {
     @FXML
     private Button loginButton;
     private ServiceComponent service;
-    private MessageService messageService;
+    private MessageServiceComponent messageService;
 
     public void setService(ServiceComponent service) {
         this.service = service;
     }
 
-    public void setMessageService(MessageService messageService) {
+    public void setMessageService(MessageServiceComponent messageService) {
         this.messageService = messageService;
     }
 

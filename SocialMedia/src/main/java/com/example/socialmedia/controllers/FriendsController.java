@@ -3,7 +3,7 @@ package com.example.socialmedia.controllers;
 import com.example.socialmedia.ro.ubbcluj.map.domain.Friendship;
 import com.example.socialmedia.ro.ubbcluj.map.domain.User;
 import com.example.socialmedia.ro.ubbcluj.map.repository.RepositoryException;
-import com.example.socialmedia.ro.ubbcluj.map.service.MessageService;
+import com.example.socialmedia.ro.ubbcluj.map.service.MessageServiceComponent;
 import com.example.socialmedia.ro.ubbcluj.map.service.ServiceComponent;
 import com.example.socialmedia.ro.ubbcluj.map.service.ServiceException;
 import javafx.collections.FXCollections;
@@ -57,7 +57,7 @@ public class FriendsController {
 
     private ServiceComponent service;
     private User user;
-    private MessageService messageService;
+    private MessageServiceComponent messageService;
 
     private final ObservableList<String> friends = FXCollections.observableArrayList();
     private final ObservableList<Pair<String, String>> friendsRequests = FXCollections.observableArrayList();
@@ -73,7 +73,7 @@ public class FriendsController {
         this.service = service;
     }
 
-    public void setMessageService(MessageService messageService) {
+    public void setMessageService(MessageServiceComponent messageService) {
         this.messageService = messageService;
     }
 

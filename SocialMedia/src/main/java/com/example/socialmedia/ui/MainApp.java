@@ -13,7 +13,6 @@ import com.example.socialmedia.ro.ubbcluj.map.repository.Repository;
 import com.example.socialmedia.ro.ubbcluj.map.repository.database.FriendshipDBRepository;
 import com.example.socialmedia.ro.ubbcluj.map.repository.database.MessageDBRepository;
 import com.example.socialmedia.ro.ubbcluj.map.repository.database.UserDBRepository;
-import com.example.socialmedia.ro.ubbcluj.map.service.MessageService;
 import com.example.socialmedia.ro.ubbcluj.map.service.MessageServiceComponent;
 import com.example.socialmedia.ro.ubbcluj.map.service.ServiceComponent;
 import javafx.application.Application;
@@ -28,7 +27,7 @@ import java.util.UUID;
 public class MainApp extends Application {
 
     private ServiceComponent service;
-    private MessageService messageService;
+    private MessageServiceComponent messageService;
 
     public static void main(String[] args) {
         launch(args);

@@ -1,6 +1,7 @@
 package com.example.socialmedia.ro.ubbcluj.map.service;
 
 import com.example.socialmedia.ro.ubbcluj.map.domain.Message;
+import com.example.socialmedia.ro.ubbcluj.map.domain.MessageObservable;
 import com.example.socialmedia.ro.ubbcluj.map.repository.Repository;
 
 import java.util.Comparator;
@@ -8,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.StreamSupport;
 
-public class MessageServiceComponent implements MessageService{
+public class MessageServiceComponent extends MessageObservable implements MessageService{
     private final Repository<UUID, Message> messageRepo;
 
     public MessageServiceComponent(Repository<UUID, Message> messageRepo) {
@@ -29,6 +30,8 @@ public class MessageServiceComponent implements MessageService{
             throw new ServiceException("Message could not be saved");
         }
 
+        notifyObservers(message);
+
         return true;
     }
 
@@ -47,7 +50,6 @@ public class MessageServiceComponent implements MessageService{
     @Override
     public Iterable<Message> getAll() throws ServiceException {
         try {
-
             return StreamSupport.stream(messageRepo.findAll().spliterator(), false).sorted(Comparator.comparing(Message::getTimeSent)).toList();
         } catch (Exception e) {
             throw new ServiceException(e.getMessage());
